@@ -1,0 +1,4 @@
+psql -U postgres // connect to posgress
+password : 'admin'
+
+

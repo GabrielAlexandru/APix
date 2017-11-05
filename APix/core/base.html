@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href={% static "reset.css" %}>
+    <link rel="stylesheet" href={% static "base.css" %}>
+    {% block head %}{% endblock %}
+    <title>{% block title %}APix{% endblock %}</title>
+</head>
+<body>
+<div id="sidebar">
+    <a href="#" id="username" class="sb-item sb-button">{{ user.get_username }}</a>
+    <div id="logged-users"></div>
+    <a href="#" class="sb-item sb-button">Link 2</a>
+    <a href="#" class="sb-item sb-button">Link 3</a>
+    <a href="#" class="sb-item sb-button">Link 4</a>
+    <a href="#" class="sb-item sb-button">Link 5</a>
+    <div id="tools-wrapper">
+        {% block tools %}{% endblock %}
+    </div>
+</div>
+
+<div id="content">
+    {% block body %}{% endblock %}
+</div>
+</body>
+</html>

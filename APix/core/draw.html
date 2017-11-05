@@ -1,0 +1,31 @@
+{% extends 'core/base.html' %}
+
+{% block head %}
+    {% load static %}
+    <link rel="stylesheet" href={% static "draw.css" %}>
+    <script src={% static "draw.js" %}></script>
+    <script src={% static "socket.js" %}></script>
+    <script src={% static "draw_base.js" %}></script>
+{% endblock %}
+
+{% block title %}Draw{% endblock %}
+
+{% block tools %}
+    <div id="tools">
+        <div id="colors">
+            <div style="background:green;" id="green" onclick="color(this)"></div>
+            <div style="background:blue;" id="blue" onclick="color(this)"></div>
+            <div style="background:red;" id="red" onclick="color(this)"></div>
+            <div style="background:yellow;" id="yellow" onclick="color(this)"></div>
+            <div style="background:orange;" id="orange" onclick="color(this)"></div>
+            <div style="background:black;" id="black" onclick="color(this)"></div>
+            <div style="background:white;" id="white" onclick="color(this)"></div>
+        </div>
+    </div>
+{% endblock %}
+{% block body %}
+
+    <canvas id="collab-drawing" style="border:1px solid #c3c3c3;">
+        Your browser does not support the canvas element.
+    </canvas>
+{% endblock %}
