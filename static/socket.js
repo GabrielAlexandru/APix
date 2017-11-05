@@ -17,7 +17,15 @@ function init_socket(username) {
             ctx.stroke();
             ctx.closePath();
         }
+        if (message_json['type'] == "canvas") {
+            var img = new Image();
+            img.onload = function copy() {
+                ctx.drawImage(img, 0, 0);
+            };
+            img.src = message_json['text']
+        }
     };
+
     socket.onopen = function () {
         var msg = {
             type: "message",
@@ -25,6 +33,11 @@ function init_socket(username) {
             room: username
         };
         socket.send(JSON.stringify(msg));
+    };
+
+    socket.onclose = function () {
+        alert("Oups, socket closed, need to fix, refresh page 4 ez fix");
     }
     //if (socket.readyState == WebSocket.OPEN) socket.onopen();
+
 }

@@ -1,3 +1,4 @@
+var username;
 function get_logged_users() {
     var xmlhttp = new XMLHttpRequest();
     var url = "/APix/get_logged_users";
@@ -12,13 +13,15 @@ function get_logged_users() {
             logged_users_json = logged_users_json["results"];
             for (i in logged_users_json) {
                 //alert(logged_users_json[i]["username"]);
-                var a_user = document.createElement("a");
-                a_user.innerText = logged_users_json[i]["username"];
-                a_user.className += "sb-item sb-button";
-                a_user.onclick = function () {
-                    init_socket(this.innerText);
-                };
-                logged_users_container.appendChild(a_user);
+                if (!(logged_users_json[i]["username"] == username)) {
+                    var a_user = document.createElement("a");
+                    a_user.innerText = logged_users_json[i]["username"];
+                    a_user.className += "sb-item sb-button";
+                    a_user.onclick = function () {
+                        init_socket(this.innerText);
+                    };
+                    logged_users_container.appendChild(a_user);
+                }
             }
         }
     };
@@ -26,8 +29,24 @@ function get_logged_users() {
     xmlhttp.send();
 }
 
-window.onload = function () {
-    init_draw();
+function sendCanvasCopy() {
+    var dataURL = canvas.toDataURL();
     var username = document.getElementById("username").innerText;
+    var msg = {
+        type: "canvas",
+        text: dataURL,
+        room: username
+    };
+    socket.send(JSON.stringify(msg));
+}
+
+window.onload = function () {
+    username = document.getElementById("username").innerText;
+    init_draw();
     init_socket(username);
+    get_logged_users();
+    window.setInterval(function () {
+        get_logged_users();
+        sendCanvasCopy();
+    }, 5000);
 };

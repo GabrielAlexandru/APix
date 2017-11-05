@@ -25,7 +25,7 @@ SECRET_KEY = 'f0my97s*n9xh_)wxmxfs*9aqyl94jy6%j0j^c5l-*78!5q85ub'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '45.77.141.89']
 
 
 # Application definition
@@ -106,13 +106,14 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LOGIN_URL = "/login"
+LOGIN_URL = "/APix/login"
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
 LOGIN_REDIRECT_URL = 'home'
 
 LANGUAGE_CODE = 'en-us'
+
 
 TIME_ZONE = 'UTC'
 

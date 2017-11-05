@@ -18,11 +18,5 @@
                 Log In
             </a>
         </div>
-        <form method="post" id="login-form">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Login</button>
-        </form>
-
     </div>
 {% endblock %}

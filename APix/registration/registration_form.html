@@ -1,13 +1,24 @@
 {% extends 'core/base.html' %}
 
+{% block head %}
+    {% load static %}
+    <link rel="stylesheet" href={% static "registration/base.css" %}>
+    <script src={% static "registration/register.js" %}></script>
+{% endblock %}
+
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    <div id="registration-form-wrap">
+    <div id="form-wrap">
+        <div id="header">
+            <a id="a-register" href="/APix/register">
+                Sign Up
+            </a>
+            <a id="a-login" href="/APix/login">
+                Log In
+            </a>
+        </div>
         <form method="post" id="registration-form">
-            <div id="header">
-                REGISTRATION FORM
-            </div>
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit">Register</button>

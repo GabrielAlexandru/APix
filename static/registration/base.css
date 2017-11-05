@@ -1,0 +1,90 @@
+#form-wrap {
+    width: 30%;
+    border-radius: 4px;
+    margin: auto;
+    overflow: hidden;
+    background-color: lightgrey;
+    color: #333;
+    font-size: 14px;
+    box-shadow: 0 4px 10px 4px rgba(19, 35, 47, 0.3);
+    font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+}
+
+#form-wrap a {
+    margin-bottom: 3%;
+    background: #1ab188;
+    color: #ffffff;
+    display: block;
+    text-decoration: none;
+    padding-top: 3%;
+    padding-bottom: 3%;
+    background: rgba(160, 179, 176, 0.25);
+    font-size: 20px;
+    float: left;
+    width: 50%;
+    text-align: center;
+    cursor: pointer;
+    -webkit-transition: opacity, background 0.3s ease-in-out;
+    -moz-transition: opacity, background 0.3s ease-in-out;
+    -ms-transition: opacity, background 0.3s ease-in-out;
+    -o-transition: opacity, background 0.3s ease-in-out;
+    transition: opacity, background 0.3s ease-in-out;
+}
+
+#form-wrap a:hover, #form-wrap button:hover {
+    outline-width: 0;
+    background: #1ab188;
+    opacity: 0.5;
+}
+
+#login-form, #registration-form {
+    border-style: hidden;
+    border-bottom-width: 10px;
+    width: 100%;
+    height: 100%;
+}
+
+#login-form input, #registration-form input, #registration-form button, #login-form button {
+    border: 1px solid #a0b3b0;
+    color: #ffffff;
+    background: #1ab188;
+    display: block;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    font-size: 18px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 3%;
+    margin-top: 3%;
+    width: 90%;
+    height: 100%;
+}
+
+#registration-form button, #login-form button {
+    cursor: pointer;
+    padding: 10px;
+    width: 70%;
+    margin-top: 1%;
+    margin-bottom: 3%;
+    -webkit-transition: opacity, background 0.3s ease-in-out;
+    -moz-transition: opacity, background 0.3s ease-in-out;
+    -ms-transition: opacity, background 0.3s ease-in-out;
+    -o-transition: opacity, background 0.3s ease-in-out;
+    transition: opacity, background 0.3s ease-in-out;
+}
+
+
+#form-wrap ul, #form-wrap span, #form-wrap label {
+    display: none;
+}
+
+
+#header {
+    width: 100%;
+    margin-left: 0;
+    height: 100%;
+    display: block;
+    text-align: center;
+    font-size: 20px;
+    background: #417690;
+}

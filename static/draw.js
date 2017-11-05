@@ -12,8 +12,8 @@ var x = "black",
 
 function init_draw() {
     canvas = document.getElementById('collab-drawing');
-    canvas.width = Math.ceil(canvas.width * 10);
-    canvas.height = Math.ceil(canvas.height * 10);
+    canvas.width = Math.ceil(canvas.width * 2);
+    canvas.height = Math.ceil(canvas.height * 2);
     rect = canvas.getBoundingClientRect();
     ctx = canvas.getContext("2d");
     w = canvas.width;

@@ -26,7 +26,7 @@ def index(request):
     if not request.user.is_authenticated:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
     else:
-        return HttpResponse("You suc")
+        return redirect(draw)
 
 def draw(request):
     if not request.user.is_authenticated:
