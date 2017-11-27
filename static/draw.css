@@ -1,6 +1,7 @@
 #collab-drawing {
     width: calc(100% - 16px);
     height: calc(100% - 16px);
+    background: white;
 }
 
 .titles {

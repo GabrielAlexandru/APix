@@ -10,6 +10,11 @@ body {
     width: 75%;
     position: fixed !important;
     overflow: auto;
+<<<<<<< HEAD
+=======
+    padding: 8px;
+    background: #1ab188;
+>>>>>>> 95b45102b2fb69ea3d65662a9d87bb59fc1a9214
 }
 
 #sidebar {
