@@ -4,11 +4,7 @@
     <list default="true" id="8159b1af-bd2d-46c7-ac6c-e88c425e0a46" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db.sqlite3" afterPath="$PROJECT_DIR$/db.sqlite3" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/APix/core/draw.html" afterPath="$PROJECT_DIR$/APix/core/draw.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/APix/registration/base.html" afterPath="$PROJECT_DIR$/APix/registration/base.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/base.css" afterPath="$PROJECT_DIR$/static/base.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/draw.css" afterPath="$PROJECT_DIR$/static/draw.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/registration/base.css" afterPath="$PROJECT_DIR$/static/registration/base.css" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -22,7 +18,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="login.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="login.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/APix/registration/login.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="210">
@@ -62,11 +58,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="base.css" pinned="false" current-in-tab="false">
+      <file leaf-file-name="base.css" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/static/base.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="10" column="31" lean-forward="true" selection-start-line="10" selection-start-column="31" selection-end-line="10" selection-end-column="31" />
+            <state relative-caret-position="336">
+              <caret line="16" column="10" lean-forward="true" selection-start-line="16" selection-start-column="10" selection-end-line="16" selection-end-column="10" />
               <folding />
             </state>
           </provider>
@@ -171,10 +167,10 @@
         <option value="$PROJECT_DIR$/static/registration/register.js" />
         <option value="$PROJECT_DIR$/static/registration/login.js" />
         <option value="$PROJECT_DIR$/static/registration/base.css" />
-        <option value="$PROJECT_DIR$/static/base.css" />
         <option value="$PROJECT_DIR$/APix/registration/base.html" />
         <option value="$PROJECT_DIR$/APix/core/draw.html" />
         <option value="$PROJECT_DIR$/static/draw.css" />
+        <option value="$PROJECT_DIR$/static/base.css" />
       </list>
     </option>
   </component>
@@ -472,7 +468,14 @@
       <option name="project" value="LOCAL" />
       <updated>1511815227920</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="logo and some minor fixes">
+      <created>1511820429044</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1511820429044</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -510,7 +513,8 @@
     <MESSAGE value="responsive forms ( phone )" />
     <MESSAGE value="fixed logout route" />
     <MESSAGE value="javascript for forms, errors, help text" />
-    <option name="LAST_COMMIT_MESSAGE" value="javascript for forms, errors, help text" />
+    <MESSAGE value="logo and some minor fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="logo and some minor fixes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -816,14 +820,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/static/base.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="10" column="31" lean-forward="true" selection-start-line="10" selection-start-column="31" selection-end-line="10" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/static/draw_base.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="504">
@@ -852,6 +848,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
           <caret line="10" column="16" lean-forward="true" selection-start-line="10" selection-start-column="16" selection-end-line="10" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/base.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="336">
+          <caret line="16" column="10" lean-forward="true" selection-start-line="16" selection-start-column="10" selection-end-line="16" selection-end-column="10" />
           <folding />
         </state>
       </provider>
