@@ -12,6 +12,7 @@
 
 {% block tools %}
     <div id="tools">
+        <h1 class="titles">Colors</h1>
         <div id="colors">
             <div style="background:green;" id="green" onclick="color(this)"></div>
             <div style="background:blue;" id="blue" onclick="color(this)"></div>
@@ -20,12 +21,39 @@
             <div style="background:orange;" id="orange" onclick="color(this)"></div>
             <div style="background:black;" id="black" onclick="color(this)"></div>
             <div style="background:white;" id="white" onclick="color(this)"></div>
+            <div id="color-div" style="background-position: center; background-image: url({% static "img/picker.png" %});">
+                <input type="color" name="color-changer" id="picker">
+            </div>
         </div>
+        <div class="spacer"></div>
+        <h1 class="titles">Size</h1>
+        <div id="size-changer">
+            <input type="range" name="pen-size" step="25" min="0" max="100">
+            <div id="size-changer-values">
+                <div><div id="val1"></div></div>
+                <div><div id="val2"></div></div>
+                <div><div id="val3"></div></div>
+                <div><div id="val4"></div></div>
+                <div><div id="val5"></div></div>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <h1 class="titles">Shapes</h1>
+        <div id="shapes">
+            <div id="circle"></div>
+            <div id="rectangle"></div>
+        </div>
+        <div class="spacer"></div>
+        <h1 class="titles">Color Picker</h1>
+        <div id="color-picker"  style="background-position: center; background-image: url({% static "img/color-picker.png" %});"></div>
+        <div class="spacer"></div>
+        <h1 class="titles">Download Image</h1>
+        <div id="download"  style="background-position: center; background-image: url({% static "img/download.png" %});"></div>
     </div>
 {% endblock %}
 {% block body %}
 
-    <canvas id="collab-drawing" style="border:1px solid #c3c3c3;">
+    <canvas id="collab-drawing" style="border:8px solid #1ab188;">
         Your browser does not support the canvas element.
     </canvas>
 {% endblock %}

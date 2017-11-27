@@ -10,7 +10,6 @@ body {
     width: 75%;
     position: fixed !important;
     overflow: auto;
-    padding: 8px;
 }
 
 #sidebar {
@@ -20,6 +19,7 @@ body {
     position: fixed !important;
     z-index: 1;
     overflow: auto;
+    background-color: #a0b3b0;
 }
 
 .sb-item {
@@ -46,5 +46,5 @@ body {
 
 .sb-item:hover {
     color: #000 !important;
-    background-color: #f1f1f1 !important;
+    background-color: #1ab188 !important;
 }

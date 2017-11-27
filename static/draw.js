@@ -34,6 +34,10 @@ function init_draw() {
 }
 
 function color(obj) {
+    if(document.getElementsByClassName("selected")[0]){
+        document.getElementsByClassName("selected")[0].className = "";
+    }
+    obj.className += "selected";
     switch (obj.id) {
         case "green":
             x = "green";
