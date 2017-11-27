@@ -66,14 +66,17 @@
     height: 26px;
     border-radius: 50%;
     cursor: pointer;
+    opacity: 0.5;
 }
 
 #colors div:hover {
+	opacity: 1;
     border: solid 2px;
     border-color: #1ab188;
 }
 
 .selected {
+	opacity: 1 !important;
     border: solid 2px !important;
     border-color: #1ab188 !important;
 }
