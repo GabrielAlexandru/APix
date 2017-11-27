@@ -11,6 +11,7 @@ body {
     position: fixed !important;
     overflow: auto;
     padding: 8px;
+    background: #1ab188;
 }
 
 #sidebar {

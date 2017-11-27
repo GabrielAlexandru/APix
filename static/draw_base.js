@@ -48,5 +48,5 @@ window.onload = function () {
     window.setInterval(function () {
         get_logged_users();
         sendCanvasCopy();
-    }, 5000);
+    }, 500);
 };
