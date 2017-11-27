@@ -89,8 +89,21 @@ body {
     transition: opacity, background 0.3s ease-in-out;
 }
 
-#form-wrap ul, #form-wrap span, #form-wrap label {
+#form-wrap label {
     display: none;
+}
+
+.helptext {
+    display: none;
+}
+
+#form-wrap ul, #form-wrap span {
+    text-align: center;
+    font-size: 0.9em;
+}
+
+.errorlist{
+    color: red;
 }
 
 #header {
