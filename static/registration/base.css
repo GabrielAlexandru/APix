@@ -4,8 +4,19 @@ body {
     line-height: 1.5;
 }
 
+#APix-logo {
+    height: 100%;
+    width: 100%;
+    margin: auto;
+    background-position: 0 0;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    max-width: 300px;
+    max-height: 300px;
+}
+
 #content {
-    margin-left: 0%;
+    margin-left: 0;
     height: 100%;
     width: 100%;
     position: fixed !important;
@@ -102,7 +113,7 @@ body {
     font-size: 0.9em;
 }
 
-.errorlist{
+.errorlist {
     color: red;
 }
 
