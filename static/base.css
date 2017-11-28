@@ -11,7 +11,7 @@ body {
     position: fixed !important;
     overflow: auto;
     padding: 8px;
-    background: #1ab188;
+    background: #4484ce;
 }
 
 #sidebar {
@@ -21,7 +21,7 @@ body {
     position: fixed !important;
     z-index: 1;
     overflow: auto;
-    background-color: #76c2ad;
+    background-color: #d9d9d9;
 }
 
 .sb-item {
@@ -48,5 +48,5 @@ body {
 
 .sb-item:hover {
     color: #000 !important;
-    background-color: #1ab188 !important;
+    background-color: #4484ce !important;
 }

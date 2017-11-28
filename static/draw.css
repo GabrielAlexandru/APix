@@ -72,19 +72,19 @@
 #colors div:hover {
 	opacity: 1;
     border: solid 2px;
-    border-color: #1ab188;
+    border-color: #4484ce;
 }
 
 .selected {
 	opacity: 1 !important;
     border: solid 2px !important;
-    border-color: #1ab188 !important;
+    border-color: #4484ce !important;
 }
 
 .spacer {
     margin: 10px;
     border: solid 1px;
-    color: #1ab188;
+    color: #4484ce;
 }
 
 #size-changer {
@@ -121,6 +121,17 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+@media screen and (max-width: 767px){
+    #content {
+        display: none;
+    }
+    #collab-drawing{
+        display: none;
+    }
+    #sidebar {
+        width: 100%;
+    }
 }
 
 #val1 {
