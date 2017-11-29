@@ -1,0 +1,13 @@
+#toolbar {
+    width: 100%;
+}
+
+#draw-button {
+    padding-top: 5%;
+    margin-bottom: 0;
+}
+
+#draw-button a {
+    padding-top: 5%;
+    padding-bottom: 5%;
+}

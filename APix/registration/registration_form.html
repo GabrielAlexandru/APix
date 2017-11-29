@@ -2,8 +2,8 @@
 
 {% block head %}
     {% load static %}
-    <link rel="stylesheet" href={% static "registration/base.css" %}>
-    <script src={% static "registration/register.js" %}></script>
+    <link rel="stylesheet" href={% static "registration/css/base.css" %}>
+    <script src={% static "registration/js/register.js" %}></script>
 {% endblock %}
 
 {% block title %}Register{% endblock %}
@@ -11,10 +11,10 @@
 {% block body %}
     <div id="form-wrap">
         <div id="header">
-            <a id="a-register" href="/APix/register">
+            <a id="a-register" href="/apix/register">
                 Sign Up
             </a>
-            <a id="a-login" href="/APix/login">
+            <a id="a-login" href="/apix/login">
                 Log In
             </a>
         </div>

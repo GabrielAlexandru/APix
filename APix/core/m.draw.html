@@ -3,6 +3,7 @@
 {% block head %}
     {% load static %}
     <link rel="stylesheet" href={% static "core/css/draw.css" %}>
+    <link rel="stylesheet" href={% static "core/css/m.draw.css" %}>
     <script src={% static "core/js/draw.js" %}></script>
     <script src={% static "core/js/socket.js" %}></script>
     <script src={% static "core/js/draw_base.js" %}></script>
@@ -37,30 +38,9 @@
             </div>
         </div>
         <div class="spacer"></div>
-        <div id="shapes">
-            <div id="circle" class="tool-button">
-                <span class="tooltiptext">Draw circle</span>
-            </div>
-            <div id="rectangle" class="tool-button">
-                <span class="tooltiptext">Draw rectangle</span>
-            </div>
-        </div>
-        <div class="spacer"></div>
-        <div id="color-picker" class="tool-button"
-             style="background-position: center; background-image: url({% static "img/color-picker.png" %});">
-            <span class="tooltiptext">Color-picker</span>
-        </div>
-        <div class="spacer"></div>
-        <div id="download" class="tool-button" style="background-image: url({% static "img/download.png" %});">
-            <span class="tooltiptext">Download</span>
-        </div>
+        <div id="download" style="background-image: url({% static "img/download.png" %});"></div>
     </div>
-{% endblock %}
-
-{% block body %}
-    <div id="content">
-        <canvas id="collab-drawing">
-            Your browser does not support the canvas element.
-        </canvas>
+    <div class="sb-item-last" id ="draw-button">
+        <a class="sb-item-top-button-large" style="background-color: rgb(26, 177, 136);">Draw</a>
     </div>
 {% endblock %}

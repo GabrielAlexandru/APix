@@ -7,7 +7,9 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.utils import timezone
 from django import template
+
 register = template.Library()
+
 
 def get_logged_users(request):
     # Query all non-expired sessions
@@ -22,11 +24,13 @@ def get_logged_users(request):
     users = User.objects.filter(id__in=uid_list).values('username')
     return JsonResponse({'results': list(users)})
 
+
 def index(request):
     if not request.user.is_authenticated:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
     else:
         return redirect(draw)
+
 
 def draw(request):
     if not request.user.is_authenticated:
@@ -34,3 +38,15 @@ def draw(request):
     else:
         username = request.user.username
         return render(request, 'core/draw.html', {'username': username})
+
+
+def mobile_draw(request):
+    if not request.user.is_authenticated:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+    else:
+        username = request.user.username
+        return render(request, 'core/m.draw.html', {'username': username})
+
+
+def documentation(request):
+    return render(request, 'core/documentation.html')

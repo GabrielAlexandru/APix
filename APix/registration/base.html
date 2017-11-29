@@ -3,8 +3,8 @@
 <head>
     {% load static %}
     <meta charset="UTF-8">
-    <link rel="stylesheet" href={% static "reset.css" %}>
-    <link rel="stylesheet" href={% static "registration/base.css" %}>
+    <link rel="stylesheet" href={% static "core/css/reset.css" %}>
+    <link rel="stylesheet" href={% static "registration/css/base.css" %}>
     {% block head %}{% endblock %}
     <title>{% block title %}APix{% endblock %}</title>
 </head>
@@ -12,7 +12,7 @@
 
 
 <div id="content">
-    <div id="APix-logo" style="background-position: center; background-image: url({% static "img/APix-logo.png" %});"></div>
+    <a href="/apix/documentation"><div id="APix-logo" style="background-position: center; background-image: url({% static "img/APix-logo.png" %});"></div></a>
     {% block body %}{% endblock %}
 </div>
 </body>

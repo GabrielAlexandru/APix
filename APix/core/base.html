@@ -4,22 +4,24 @@
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href={% static "reset.css" %}>
-    <link rel="stylesheet" href={% static "base.css" %}>
+    <link rel="stylesheet" href={% static "core/css/reset.css" %}>
+    <link rel="stylesheet" href={% static "core/css/base.css" %}>
     {% block head %}{% endblock %}
     <title>{% block title %}APix{% endblock %}</title>
 </head>
 <body>
-<div id="sidebar">
-    <a href="#" id="username" class="sb-item">{{ user.get_username }}</a>
-    <div id="logged-users"></div>
+<div id="toolbar">
+    <div class="sb-item-top">
+        <a href="#" id="username" class="sb-item-top-button">{{ user.get_username }}</a>
+        <a class="sb-item-top-button" href="/apix/logout" style="background-color: rgb(26, 177, 136);">Log Out</a>
+    </div>
+    <select id="logged-users" class="sb-item"></select>
     <div id="tools-wrapper">
         {% block tools %}{% endblock %}
     </div>
 </div>
 
-<div id="content">
-    {% block body %}{% endblock %}
-</div>
+{% block body %}{% endblock %}
+
 </body>
 </html>

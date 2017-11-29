@@ -8,5 +8,7 @@ urlpatterns = [
     url(r'get_logged_users', views.get_logged_users, name='get_logged_users'),
     url(r'^', include('registration.backends.simple.urls')),
     url(r'^$', views.index, name='home'),
+    url(r'draw-mobile', views.mobile_draw, name='m.draw'),
     url(r'draw', views.draw, name='draw'),
+    url(r'documentation', views.documentation, name='documentation'),
 ]

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href={% static "core/css/reset.css" %}>
+    <link rel="stylesheet" href={% static "core/scholarly_specific/scholarly.css" %}>
+    <title>APix Documentation</title>
+</head>
+<body prefix="schema: http://schema.org/ xsd: http://www.w3.org/2001/XMLSchema# sa: https://ns.science.ai/">
+<header>
+    <p class="title">APix Documentation</p>
+    <p class="subtitle">Draw Together</p>
+</header>
+<article id="what" typeof="schema:ScholarlyArticle" resource="#">
+    <h1>What is APix?</h1>
+    <section>
+        <ol>
+            <li property="schema:author" typeof="sa:ContributorRole">
+                <a property="schema:author" href="https://github.com/EX0PHIC" typeof="schema:Person">
+                    <span property="schema:givenName">Vlad-Gabriel</span>
+                    <span property="schema:familyName">Cazacu</span>
+                </a>
+                <a href="#infouaicro" property="sa:roleAffiliation" resource="https://www.info.uaic.ro/">a</a>
+                <sup property="sa:roleContactPoint" typeof="schema:ContactPoint">
+                    <a property="schema:email" href="mailto:gabrielcazacu96@gmail.com"
+                       title="corresponding author">✉</a>
+                </sup>
+            </li>
+            <li property="schema:contributor" typeof="sa:ContributorRole">
+                <a property="schema:contributor" href="https://github.com/GabrielAlexandru/" typeof="schema:Person">
+                    <span property="schema:givenName">Gabriel</span>
+                    <span property="schema:familyName">Alexandru</span>
+                </a>
+                <a href="#infouaicro" property="sa:roleAffiliation" resource="https://www.info.uaic.ro/">a</a>
+            </li>
+        </ol>
+        <ol>
+            <li id="info.uaic">
+                <a href="https://www.info.uaic.ro/" typeof="schema:University">
+                    <span property="schema:name">info.uaic</span>
+                </a>
+            </li>
+        </ol>
+    </section>
+
+    <section typeof="sa:Abstract" id="abstract">
+        <h2>Abstract</h2>
+        <p>
+            APix is a web application which offers its users te tools to draw together online. This document describes
+            how APix works.
+        </p>
+    </section>
+
+    <section typeof="sa:About" id="about">
+        <h2>About</h2>
+        <p>
+            Users are able to:
+        </p>
+        <ul>
+            <li>- sign up an account</li>
+            <li>- log in</li>
+            <li>- draw using multiple drawing tools on a canvas</li>
+            <li>- share their canvas with other users connected to the app</li>
+            <li>- chat with other users</li>
+            <li>- draw on desktop using a remote(android phone)</li>
+        </ul>
+    </section>
+
+    <section typeof="sa:Implementation" id="implementation">
+        <h2>Implementation</h2>
+        <p>
+            The backend is implemented using the python-based framework <a
+                href="https://www.djangoproject.com/">Django</a>. Plugins included in the project: <b>django-registration</b>,
+            <b>channels</b>(websockets).
+        </p>
+        <p>
+            Frontend is pure javascript, css3 and html5.
+        </p>
+
+    </section>
+
+    <section typeof="sa:Design" id="design">
+        <h2>APix Design</h2>
+        <h3>Sign Up</h3>
+        <p>
+            The sign up form is pretty simple, a new user needs a username, email and a password.
+            The form will display help text for input and errors in case there are any (username already used by someone
+            else for example).
+        </p>
+        <p>
+            The user will be redirected to this sign up form page on him first accesing the web-application. Route:
+            <code>/apix/register</code>.
+        </p>
+        <p>
+            Design below:
+        </p>
+        <figure typeof="sa:Image">
+            <img src="{% static "img/documentation/p02.png" %}">
+            <figcaption>
+                Sign Up form
+            </figcaption>
+        </figure>
+
+        <p>
+            As it can be seen in the above image the user is able to switch to the login form if he already has an account.
+        </p>
+
+        <h3>Login</h3>
+        <p>
+            Pretty self-explanatory, a login form. It will show an error in case the login information is not valid.
+             Route: <code>/apix/login</code>.
+        </p>
+        <p>
+            Design below and also the logo which is present on the sign up form too as they use the same base template:
+        </p>
+        <figure typeof="sa:Image">
+            <img src="{% static "img/documentation/p01.png" %}">
+            <figcaption>
+                Log In form and logo
+            </figcaption>
+        </figure>
+        <h3>Canvas & Controls</h3>
+        <p>
+            On a successful sign-up or login, the user will be redirected to this page (otherwise the user will be redirected back to the login/signup page). To draw on the canvas, the user can just start click-moving the mouse on it.
+        </p>
+        <p>
+            Route: <code>/apix/draw</code>
+        </p>
+        <figure typeof="sa:Image">
+            <img src="{% static "img/documentation/p03.png" %}">
+            <figcaption>
+                Drawing canvas and controls
+            </figcaption>
+        </figure>
+
+        <p>
+            The user can use the controls on the left side of the page to:
+        </p>
+        <ul>
+            <li>- logout</li>
+            <li>- connect to someone else's room and draw</li>
+            <li>- chat with people in the current room</li>
+            <li>- use the tools available to draw, download, or manipulate the canvas</li>
+        </ul>
+        <h3>Remote Control</h3>
+        <p>A user can connect with his android phone and start drawing on the canvas that is visible on the desktop by moving the phone around</p>
+        <p>
+            There is a special route for this functionality and the user will be redirected automatically if the user-agent is an android phone.
+            Route: <code>/apix/draw-mobile</code>
+        </p>
+    </section>
+</article>
+<footer>
+    <p>
+        APix
+    </p>
+</footer>
+</body>
+</html>

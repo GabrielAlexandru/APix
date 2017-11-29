@@ -1,7 +1,9 @@
 var username;
+var isAndroid = navigator.userAgent.toLowerCase().indexOf("android") > -1;
+
 function get_logged_users() {
     var xmlhttp = new XMLHttpRequest();
-    var url = "/APix/get_logged_users";
+    var url = "/apix/get_logged_users";
 
     xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
@@ -11,18 +13,22 @@ function get_logged_users() {
             }
             var logged_users_json = JSON.parse(this.response);
             logged_users_json = logged_users_json["results"];
+            var a_user = document.createElement("option");
+            a_user.value = username;
+            a_user.innerText = username;
+            logged_users_container.appendChild(a_user);
             for (i in logged_users_json) {
                 //alert(logged_users_json[i]["username"]);
                 if (!(logged_users_json[i]["username"] == username)) {
-                    var a_user = document.createElement("a");
+                    var a_user = document.createElement("option");
+                    a_user.value = logged_users_json[i]["username"];
                     a_user.innerText = logged_users_json[i]["username"];
-                    a_user.className += "sb-item sb-button";
-                    a_user.onclick = function () {
-                        init_socket(this.innerText);
-                    };
                     logged_users_container.appendChild(a_user);
                 }
             }
+            logged_users_container.onchange = function () {
+                init_socket(this.value);
+            };
         }
     };
     xmlhttp.open("GET", url, true);
@@ -41,12 +47,16 @@ function sendCanvasCopy() {
 }
 
 window.onload = function () {
+    if (isAndroid) {
+
+        return;
+    }
+
     username = document.getElementById("username").innerText;
     init_draw();
     init_socket(username);
     get_logged_users();
     window.setInterval(function () {
-        get_logged_users();
         sendCanvasCopy();
     }, 500);
 };
