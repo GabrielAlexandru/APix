@@ -106,7 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LOGIN_URL = "/APix/login"
+LOGIN_URL = "/apix/login"
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
