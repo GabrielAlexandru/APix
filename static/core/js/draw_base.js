@@ -45,16 +45,37 @@ function sendCanvasCopy() {
     };
     socket.send(JSON.stringify(msg));
 }
+var tic = false;
+function sendRemotePosition(event) {
+    var x = event.beta;
+    var y = event.gamma;
+    var text = [x, y];
+
+    var username = document.getElementById("username").innerText;
+    var msg = {
+        type: "remote",
+        text: text,
+        room: username
+    };
+    if(tic)
+    socket.send(JSON.stringify(msg));
+}
 
 window.onload = function () {
     if (isAndroid) {
-
+        window.setInterval(function () {
+            tic = true;
+        }, 1000);
+        username = document.getElementById("username").innerText;
+        init_socket(username, "remote");
+        get_logged_users();
+        window.addEventListener('deviceorientation', sendRemotePosition);
         return;
     }
 
     username = document.getElementById("username").innerText;
     init_draw();
-    init_socket(username);
+    init_socket(username, "desktop");
     get_logged_users();
     window.setInterval(function () {
         sendCanvasCopy();
