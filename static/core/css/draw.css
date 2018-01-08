@@ -80,13 +80,13 @@
 }
 
 #colors div:hover {
-	opacity: 1;
+    opacity: 1;
     border: solid 2px;
     border-color: #4484ce;
 }
 
 .selected {
-	opacity: 1 !important;
+    opacity: 1 !important;
     border: solid 2px !important;
     border-color: #4484ce !important;
 }
@@ -98,8 +98,11 @@
 }
 
 #size-changer {
-    margin: 5px;
-    width: 100%;
+    margin: 10px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
 }
 
 #tools {
@@ -114,6 +117,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    width: 105%;
 }
 
 #val1, #val2, #val3, #val4, #val5 {
@@ -207,7 +211,7 @@ input[type="color"] {
 input[type=range] {
     -webkit-appearance: none;
     border: 1px solid white;
-    width: calc(100% - 20px);
+    width: 100%;
 }
 
 input[type=range]::-webkit-slider-runnable-track {

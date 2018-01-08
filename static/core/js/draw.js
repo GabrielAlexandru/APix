@@ -3,7 +3,8 @@ var canvas, ctx, flag = false,
     currX = 0,
     prevY = 0,
     currY = 0,
-    dot_flag = false;
+    dot_flag = false,
+    sizeRange;
 
 var rect;
 
@@ -11,6 +12,7 @@ var x = "black",
     y = 2;
 
 function init_draw() {
+    sizeRange = document.getElementById("size-range");
     canvas = document.getElementById('collab-drawing');
     canvas.width = Math.ceil(canvas.width * 2);
     canvas.height = Math.ceil(canvas.height * 2);
@@ -19,6 +21,9 @@ function init_draw() {
     w = canvas.width;
     h = canvas.height;
 
+    sizeRange.addEventListener("input", function (e) {
+        y = Math.floor(sizeRange.value/10);
+    }, false);
     canvas.addEventListener("mousemove", function (e) {
         findxy('move', e)
     }, false);
@@ -72,6 +77,7 @@ function draw() {
     ctx.lineTo(currX, currY);
     ctx.strokeStyle = x;
     ctx.lineWidth = y;
+    ctx.lineJoin = ctx.lineCap = 'round';
     ctx.stroke();
     ctx.closePath();
     sendInstructions(prevX, prevY, currX, currY, x, y)
@@ -116,6 +122,7 @@ function findxy(res, e) {
         if (dot_flag) {
             ctx.beginPath();
             ctx.fillStyle = x;
+            ctx.lineJoin = ctx.lineCap = 'round';
             ctx.fillRect(currX, currY, 2, 2);
             ctx.closePath();
             dot_flag = false;
