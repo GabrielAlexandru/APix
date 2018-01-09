@@ -34,11 +34,16 @@
     color: #4286f4;
 }
 
-#color-picker {
+#color-picker-parent {
     width: 50px;
     height: 50px;
     margin: auto;
     cursor: pointer;
+}
+#color-picker {
+    width: 50px;
+    height: 50px;
+    background-position: center;
 }
 
 #download {
@@ -228,7 +233,7 @@ input[type=range]::-webkit-slider-thumb {
     height: 16px;
     width: 16px;
     border-radius: 50%;
-    background: goldenrod;
+    background: black;
     margin-top: -4px;
 }
 
@@ -253,7 +258,7 @@ input[type=range]::-moz-range-thumb {
     height: 16px;
     width: 16px;
     border-radius: 50%;
-    background: goldenrod;
+    background: black;
 }
 
 input[type=range]:-moz-focusring {
@@ -285,7 +290,7 @@ input[type=range]::-ms-thumb {
     height: 16px;
     width: 16px;
     border-radius: 50%;
-    background: goldenrod;
+    background: black;
 }
 
 input[type=range]:focus::-ms-fill-lower {
@@ -304,4 +309,8 @@ input[type=range]:focus::-ms-fill-upper {
     height: 20px;
     background: green;
     border-radius: 100%;
+}
+
+.picker-on {
+    opacity: 0.5;
 }
