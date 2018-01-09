@@ -4,16 +4,18 @@ var canvas, ctx, flag = false,
     prevY = 0,
     currY = 0,
     dot_flag = false,
-    sizeRange;
+    sizeRange,
+    picker;
 
 var rect;
 
 var x = "black",
-    y = 2;
+    y = 5;
 
 function init_draw() {
     sizeRange = document.getElementById("size-range");
-    canvas = document.getElementById('collab-drawing');
+    canvas = document.getElementById("collab-drawing");
+    picker = document.getElementById("picker");
     canvas.width = Math.ceil(canvas.width * 2);
     canvas.height = Math.ceil(canvas.height * 2);
     rect = canvas.getBoundingClientRect();
@@ -42,6 +44,9 @@ function color(obj) {
     if(document.getElementsByClassName("selected")[0]){
         document.getElementsByClassName("selected")[0].className = "";
     }
+    picker.addEventListener("input", function () {
+        x = picker.value;
+    }, false);
     obj.className += "selected";
     switch (obj.id) {
         case "green":
@@ -67,7 +72,6 @@ function color(obj) {
             break;
     }
     if (x == "white") y = 14;
-    else y = 2;
 
 }
 
