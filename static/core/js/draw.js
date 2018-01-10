@@ -9,7 +9,7 @@ var canvas, ctx, flag = false,
 
 var rect;
 
-var x = "black",
+var colorX = "black",
     y = 5;
 
 function init_draw() {
@@ -22,20 +22,23 @@ function init_draw() {
     ctx = canvas.getContext("2d");
     w = canvas.width;
     h = canvas.height;
+    //bitchass fix, maybe
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, w, h);
 
     sizeRange.addEventListener("input", function (e) {
         y = Math.floor(sizeRange.value/10);
     }, false);
-    canvas.addEventListener("mousemove", function (e) {
+    canvas.addEventListener("mousemove", mousemove = function (e) {
         findxy('move', e)
     }, false);
-    canvas.addEventListener("mousedown", function (e) {
+    canvas.addEventListener("mousedown", mousedown = function (e) {
         findxy('down', e)
     }, false);
-    canvas.addEventListener("mouseup", function (e) {
+    canvas.addEventListener("mouseup", mouseup = function (e) {
         findxy('up', e)
     }, false);
-    canvas.addEventListener("mouseout", function (e) {
+    canvas.addEventListener("mouseout", mouseout = function (e) {
         findxy('out', e)
     }, false);
 }
@@ -45,52 +48,52 @@ function color(obj) {
         document.getElementsByClassName("selected")[0].className = "";
     }
     picker.addEventListener("input", function () {
-        x = picker.value;
-        document.styleSheets[2].insertRule("input[type=range]::-webkit-slider-thumb { background: " + x + "; }", document.styleSheets[2].cssRules.length);
+        colorX = picker.value;
+        document.styleSheets[2].insertRule("input[type=range]::-webkit-slider-thumb { background: " + colorX + "; }", document.styleSheets[2].cssRules.length);
     }, false);
     obj.className += "selected";
     switch (obj.id) {
         case "green":
-            x = "green";
+            colorX = "green";
             break;
         case "blue":
-            x = "blue";
+            colorX = "blue";
             break;
         case "red":
-            x = "red";
+            colorX = "red";
             break;
         case "yellow":
-            x = "yellow";
+            colorX = "yellow";
             break;
         case "orange":
-            x = "orange";
+            colorX = "orange";
             break;
         case "black":
-            x = "black";
+            colorX = "black";
             break;
         case "white":
-            x = "white";
+            colorX = "white";
             break;
     }
-    if (x == "white") y = 14;
-
+    if (colorX == "white") y = 14;
+    document.styleSheets[2].insertRule("input[type=range]::-webkit-slider-thumb { background: " + colorX + "; }", document.styleSheets[2].cssRules.length);
 }
 
 function draw() {
     ctx.beginPath();
     ctx.moveTo(prevX, prevY);
     ctx.lineTo(currX, currY);
-    ctx.strokeStyle = x;
+    ctx.strokeStyle = colorX;
     ctx.lineWidth = y;
     ctx.lineJoin = ctx.lineCap = 'round';
     ctx.stroke();
     ctx.closePath();
-    sendInstructions(prevX, prevY, currX, currY, x, y)
+    sendInstructions(prevX, prevY, currX, currY, colorX, y)
     console.log("finshed action");
 }
 
-function sendInstructions(prevX, prevY, currX, currY, x, y) {
-    text = [prevX, prevY, currX, currY, x, y];
+function sendInstructions(prevX, prevY, currX, currY, colorX, y) {
+    text = [prevX, prevY, currX, currY, colorX, y];
     var username = document.getElementById("username").innerText;
     var msg = {
         type: "command",
@@ -126,7 +129,7 @@ function findxy(res, e) {
         dot_flag = true;
         if (dot_flag) {
             ctx.beginPath();
-            ctx.fillStyle = x;
+            ctx.fillStyle = colorX;
             ctx.lineJoin = ctx.lineCap = 'round';
             ctx.fillRect(currX, currY, 2, 2);
             ctx.closePath();
@@ -147,16 +150,12 @@ function findxy(res, e) {
     }
 }
 
-function findPos(obj) {
-    var curleft = 0, curtop = 0;
-    if (obj.offsetParent) {
-        do {
-            curleft += obj.offsetLeft;
-            curtop += obj.offsetTop;
-        } while (obj = obj.offsetParent);
-        return { x: curleft, y: curtop };
-    }
-    return undefined;
+function findPos(canvas, e) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+        x: (e.clientX - rect.left) / (rect.right - rect.left) * canvas.width,
+        y: (e.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
+    };
 }
 
 function rgbToHex(r, g, b) {
@@ -170,19 +169,65 @@ function pick() {
     if(picker2.className != "picker-on"){
         canvas.style.cursor = "crosshair";
         picker2.className = "picker-on";
+
+        var context = canvas.getContext('2d');
+        canvas.addEventListener("mousemove", mousePicker = function(e) {
+            var pos = findPos(canvas, e);
+            var x = pos.x;
+            var y = pos.y;
+            var coord = "x=" + x + ", y=" + y;
+            var p = context.getImageData(x, y, 1, 1).data;
+            var hex = "#" + ("000000" + rgbToHex(p[0], p[1], p[2])).slice(-6);
+            document.styleSheets[2].insertRule("input[type=range]::-webkit-slider-thumb { background: " + hex + "; }", document.styleSheets[2].cssRules.length);
+        }, false);
+
+        canvas.addEventListener("click", pickedColor = function (e) {
+            var rect = canvas.getBoundingClientRect();
+            var x = (e.clientX - rect.left) / (rect.right - rect.left) * canvas.width;
+            var y = (e.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height;
+            var p = context.getImageData(x, y, 1, 1).data;
+            var hex = "#" + ("000000" + rgbToHex(p[0], p[1], p[2])).slice(-6);
+            colorX = hex;
+            canvas.removeEventListener("mousemove", mousePicker);
+            canvas.style.cursor = "auto";
+            picker2.className = "";
+            canvas.removeEventListener("mousemove", mousePicker);
+
+            canvas.addEventListener("mousemove", mousemove = function (e) {
+                findxy('move', e)
+            }, false);
+            canvas.addEventListener("mousedown", mousedown = function (e) {
+                findxy('down', e)
+            }, false);
+            canvas.addEventListener("mouseup", mouseup = function (e) {
+                findxy('up', e)
+            }, false);
+            canvas.addEventListener("mouseout", mouseout = function (e) {
+                findxy('out', e)
+            }, false);
+            canvas.removeEventListener("click", pickedColor);
+        }, false);
+
+        canvas.removeEventListener("mousemove", mousemove, false);
+        canvas.removeEventListener("mousedown", mousedown, false);
+        canvas.removeEventListener("mouseup", mouseup, false);
+        canvas.removeEventListener("mouseout", mouseout, false);
     } else {
         canvas.style.cursor = "auto";
         picker2.className = "";
+        canvas.removeEventListener("mousemove", mousePicker);
+
+        canvas.addEventListener("mousemove", mousemove = function (e) {
+            findxy('move', e)
+        }, false);
+        canvas.addEventListener("mousedown", mousedown = function (e) {
+            findxy('down', e)
+        }, false);
+        canvas.addEventListener("mouseup", mouseup = function (e) {
+            findxy('up', e)
+        }, false);
+        canvas.addEventListener("mouseout", mouseout = function (e) {
+            findxy('out', e)
+        }, false);
     }
-    var context = canvas.getContext('2d');
-    canvas.addEventListener("mousemove", function(e) {
-        var pos = findPos(this);
-        var x = e.pageX - pos.x;
-        var y = e.pageY - pos.y;
-        var coord = "x=" + x + ", y=" + y;
-        // var c = this.getContext('2d');
-        var p = context.getImageData(x, y, 1, 1).data;
-        var hex = "#" + ("000000" + rgbToHex(p[0], p[1], p[2])).slice(-6);
-        console.log(p);
-    }, false);
 }
