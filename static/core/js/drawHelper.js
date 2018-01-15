@@ -19,7 +19,7 @@ var DrawHelper = function (channel) {
     this.ctx = null;
     this.rect = null;
     this.sizeRange = null;
-    this.picker = null;
+    this.picker = document.getElementById("picker");
     this.pickerCanvas = null;
     this.color = "black";
     this.pencilSize = 5;
@@ -113,14 +113,16 @@ var DrawHelper = function (channel) {
     }.bind(this);
 
     this.colorSwitch = function (obj) {
+        console.log("emfgt");
         var tmpColor;
         if (document.getElementsByClassName("selected")[0]) {
             document.getElementsByClassName("selected")[0].className = "";
         }
         this.picker.addEventListener("input", function () {
-            tmpColor = this.value;
+            tmpColor = this.picker.value;
+            this.color = tmpColor;
             document.styleSheets[2].insertRule("input[type=range]::-webkit-slider-thumb { background: " + tmpColor + "; }", document.styleSheets[2].cssRules.length);
-        }, false);
+        }.bind(this), false);
         obj.className += "selected";
         switch (obj.id) {
             case "green":
