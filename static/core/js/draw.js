@@ -98,7 +98,7 @@ function sendInstructions(prevX, prevY, currX, currY, colorX, pencilSize) {
         text: text,
         room: username
     };
-    socket.send(JSON.stringify(msg));
+    channel.socket.send(JSON.stringify(msg));
 }
 
 function erase() {
