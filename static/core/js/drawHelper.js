@@ -24,19 +24,8 @@ var DrawHelper = function (channel) {
     this.color = "black";
     this.pencilSize = 5;
 
-    this.initCanvas = function (canvas) {
-        canvas.width = Math.ceil(canvas.width * 2);
-        canvas.height = Math.ceil(canvas.height * 2);
-
-        w = canvas.width;
-        h = canvas.height;
-
+    this.defaultDrawingON = function (canvas) {
         var findxy = this.findxy;
-
-        this.canvas = canvas;
-        this.rect = canvas.getBoundingClientRect();
-        this.ctx = canvas.getContext("2d");
-
         canvas.addEventListener("mousemove", mousemove = function (e) {
             findxy('move', e)
         }, false);
@@ -49,6 +38,29 @@ var DrawHelper = function (channel) {
         canvas.addEventListener("mouseout", mouseout = function (e) {
             findxy('out', e)
         }, false);
+    }.bind(this);
+
+    this.defaultDrawingOFF = function (canvas) {
+        canvas.removeEventListener("mousemove", mousemove, false);
+        canvas.removeEventListener("mousedown", mousedown, false);
+        canvas.removeEventListener("mouseup", mouseup, false);
+        canvas.removeEventListener("mouseout", mouseout, false);
+    }.bind(this);
+
+    this.initCanvas = function (canvas) {
+        canvas.width = Math.ceil(canvas.width * 2);
+        canvas.height = Math.ceil(canvas.height * 2);
+
+        w = canvas.width;
+        h = canvas.height;
+
+
+
+        this.canvas = canvas;
+        this.rect = canvas.getBoundingClientRect();
+        this.ctx = canvas.getContext("2d");
+
+        this.defaultDrawingON(canvas);
     }.bind(this);
 
     this.initSizeRange = function (sizeRange) {
@@ -319,50 +331,17 @@ var DrawHelper = function (channel) {
                 canvas.removeEventListener("mousemove", mousePicker);
 
 
-                canvas.addEventListener("mousemove", mousemove = function (e) {
-                    findxy('move', e)
-                }, false);
-                canvas.addEventListener("mousedown", mousedown = function (e) {
-                    flag = true;
-                    dot_flag = true;
-                    findxy('down', e)
-                }, false);
-                canvas.addEventListener("mouseup", mouseup = function (e) {
-                    flag = false;
-                    findxy('up', e)
-                }, false);
-                canvas.addEventListener("mouseout", mouseout = function (e) {
-                    flag = false;
-                    findxy('out', e)
-                }, false);
+                this.defaultDrawingON(canvas);
                 canvas.removeEventListener("click", pickedColor);
-            }, false);
+            }.bind(this), false);
 
-            canvas.removeEventListener("mousemove", mousemove, false);
-            canvas.removeEventListener("mousedown", mousedown, false);
-            canvas.removeEventListener("mouseup", mouseup, false);
-            canvas.removeEventListener("mouseout", mouseout, false);
+            this.defaultDrawingOFF(canvas);
         } else {
             canvas.style.cursor = "auto";
             pickerCanvas.className = "";
             canvas.removeEventListener("mousemove", mousePicker);
 
-            canvas.addEventListener("mousemove", mousemove = function (e) {
-                findxy('move', e)
-            }, false);
-            canvas.addEventListener("mousedown", mousedown = function (e) {
-                flag = true;
-                dot_flag = true;
-                findxy('down', e)
-            }, false);
-            canvas.addEventListener("mouseup", mouseup = function (e) {
-                flag = false;
-                findxy('up', e)
-            }, false);
-            canvas.addEventListener("mouseout", mouseout = function (e) {
-                flag = false;
-                findxy('out', e)
-            }, false);
+            this.defaultDrawingON(canvas);
         }
     }.bind(this);
 };
