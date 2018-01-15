@@ -23,6 +23,8 @@ var DrawHelper = function (channel) {
     this.pickerCanvas = null;
     this.color = "black";
     this.pencilSize = 5;
+    this.captures = document.getElementById("captures");
+    this.captureList = [];
 
     this.defaultDrawingON = function (canvas) {
         var findxy = this.findxy;
@@ -349,5 +351,55 @@ var DrawHelper = function (channel) {
 
             this.defaultDrawingON(canvas);
         }
+    }.bind(this);
+
+    this.downloadPNG = function () {
+        var helper = this;
+        var img = helper.canvas.toDataURL("image/png");
+        var imgDiv = document.createElement("a");
+        imgDiv.href = img;
+        imgDiv.download = 'YourPNG.png';
+        imgDiv.style.display = "none";
+        document.body.appendChild(imgDiv);
+        imgDiv.click();
+        document.body.removeChild(imgDiv);
+    }.bind(this);
+
+    this.downloadSVG = function () {
+        var helper = this;
+        var img = helper.canvas.toDataURL("image/png");
+        var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        var imgDiv = document.createElementNS("http://www.w3.org/2000/svg", "image");
+        imgDiv.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", img);
+        svg.style.display = "none";
+        svg.appendChild(imgDiv);
+        var serializer = new XMLSerializer();
+        var source = serializer.serializeToString(svg);
+        if(!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)){
+            source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+        }
+        if(!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)){
+            source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+        }
+        source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
+        var url = "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(source);
+        var link = document.createElement("a");
+        link.href = url;
+        link.download = "YourSVG.svg";
+        link.style.display = "none";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }.bind(this);
+
+    this.capture = function () {
+        var helper = this;
+        var img = helper.canvas.toDataURL("image/png");
+        var imgDiv = document.createElement("img");
+        imgDiv.classList.add("capture");
+        imgDiv.src = img;
+        helper.captures.append(imgDiv);
+        console.log(imgDiv);
+
     }.bind(this);
 };

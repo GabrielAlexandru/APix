@@ -24,7 +24,20 @@
     flex-direction: row;
     justify-content: space-evenly;
 }
-
+#captures{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    width: auto;
+    height: auto;
+}
+.capture {
+    width: 40%;
+    height: 40%;
+    padding-top: 5px;
+    cursor: pointer;
+}
 #circle {
     border-radius: 50%;
     width: 30px;
@@ -40,20 +53,32 @@
     margin: auto;
     cursor: pointer;
 }
+#image-processing{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+#download-parent, #download-png-parent, #download-svg-parent{
+    width: 60px;
+    height: 60px;
+    margin: auto;
+    cursor: pointer;
+}
 #picker-canvas {
     width: 50px;
     height: 50px;
     background-position: center;
 }
 
-#download {
+#download, #download-png, #download-svg {
     width: 60px;
     height: 60px;
     margin: auto;
     cursor: pointer;
 }
 
-#rectangle:hover, #circle:hover, #color-picker:hover, #download:hover {
+.capture:hover, #rectangle:hover, #circle:hover, #picker-canvas:hover, #download:hover, #download-png:hover, #download-svg:hover {
     opacity: 0.5;
     -webkit-transition: opacity 0.2s;
     transition: opacity 0.2s;

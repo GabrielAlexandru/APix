@@ -50,8 +50,22 @@
             <div id="picker-canvas" onclick="drawHelper.pick()" style="background-image: url({% static "img/color-picker.png" %});"></div>
         </div>
         <div class="spacer"></div>
-        <div id="download" class="tool-button" style="background-image: url({% static "img/download.png" %});">
-            <span class="tooltiptext">Download</span>
+        <div id="image-processing">
+            <div id="download-parent" class="tool-button">
+                <span class="tooltiptext">Capture</span>
+                <div id="download"  style="background-image: url({% static "img/capture.png" %});" onclick="drawHelper.capture()"></div>
+            </div>
+            <div id="download-png-parent" class="tool-button">
+                <span class="tooltiptext">Download PNG</span>
+                <div id="download-png" style="background-image: url({% static "img/png.png" %});" onclick="drawHelper.downloadPNG()"></div>
+            </div>
+            <div id="download-svg-parent" class="tool-button">
+                <span class="tooltiptext">Download SVG</span>
+                <div id="download-svg" style="background-image: url({% static "img/svg.png" %});" onclick="drawHelper.downloadSVG()"></div>
+            </div>
+        </div>
+        <div id="captures">
+
         </div>
     </div>
 {% endblock %}
