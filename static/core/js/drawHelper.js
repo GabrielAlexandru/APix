@@ -13,12 +13,14 @@ function rgbToHex(r, g, b) {
     return ((r << 16) | (g << 8) | b).toString(16);
 }
 
-var drawingHelper = function () {
+var DrawHelper = function (channel) {
+    this.channel = channel;
     this.canvas = null;
     this.ctx = null;
     this.rect = null;
     this.sizeRange = null;
     this.picker = null;
+    this.pickerCanvas = null;
     this.color = "black";
     this.pencilSize = 5;
 
@@ -29,27 +31,46 @@ var drawingHelper = function () {
         w = canvas.width;
         h = canvas.height;
 
-        canvas.addEventListener("mousemove", mousemove = function (e) {
-            this.findxy('move', e)
-        }, false);
-        canvas.addEventListener("mousedown", mousedown = function (e) {
-            this.findxy('down', e)
-        }, false);
-        canvas.addEventListener("mouseup", mouseup = function (e) {
-            this.findxy('up', e)
-        }, false);
-        canvas.addEventListener("mouseout", mouseout = function (e) {
-            this.findxy('out', e)
-        }, false);
+        var findxy = this.findxy;
 
         this.canvas = canvas;
         this.rect = canvas.getBoundingClientRect();
         this.ctx = canvas.getContext("2d");
-    };
+
+        canvas.addEventListener("mousemove", mousemove = function (e) {
+            findxy('move', e)
+        }, false);
+        canvas.addEventListener("mousedown", mousedown = function (e) {
+            findxy('down', e)
+        }, false);
+        canvas.addEventListener("mouseup", mouseup = function (e) {
+            findxy('up', e)
+        }, false);
+        canvas.addEventListener("mouseout", mouseout = function (e) {
+            findxy('out', e)
+        }, false);
+    }.bind(this);
+
+    this.initSizeRange = function (sizeRange) {
+        var helper = this;
+        sizeRange.addEventListener("input", function (e) {
+            helper.pencilSize = Math.floor(sizeRange.value / 10);
+        }, false);
+
+        this.sizeRange = sizeRange;
+    }.bind(this);
+
+    this.initPicker = function (picker) {
+        this.picker = picker;
+    }.bind(this);
+
+    this.initPickerCanvas = function (pickerCanvas) {
+        this.pickerCanvas = pickerCanvas;
+    }.bind(this);
 
     this.findxy = function (res, e) {
-        var rect = this.rect;
         var canvas = this.canvas;
+        var rect = this.rect;
         var ctx = this.ctx;
         if (res === 'down') {
             prevX = currX;
@@ -80,23 +101,15 @@ var drawingHelper = function () {
                 this.draw();
             }
         }
-    };
+    }.bind(this);
 
-    this.initSizeRange = function (sizeRange) {
-        sizeRange.addEventListener("input", function (e) {
-            pencilSize = Math.floor(sizeRange.value / 10);
-        }, false);
-
-        this.sizeRange = sizeRange;
-    };
-
-    this.color = function (obj) {
+    this.colorSwitch = function (obj) {
         var tmpColor;
         if (document.getElementsByClassName("selected")[0]) {
             document.getElementsByClassName("selected")[0].className = "";
         }
-        picker.addEventListener("input", function () {
-            tmpColor = this.picker.value;
+        this.picker.addEventListener("input", function () {
+            tmpColor = this.value;
             document.styleSheets[2].insertRule("input[type=range]::-webkit-slider-thumb { background: " + tmpColor + "; }", document.styleSheets[2].cssRules.length);
         }, false);
         obj.className += "selected";
@@ -123,10 +136,10 @@ var drawingHelper = function () {
                 tmpColor = "white";
                 break;
         }
+        this.color = tmpColor;
         document.styleSheets[2].insertRule("input[type=range]::-webkit-slider-thumb { background: " + tmpColor + "; }", document.styleSheets[2].cssRules.length);
 
-        this.color = tmpColor;
-    };
+    }.bind(this);
 
     this.draw = function () {
         var ctx = this.ctx;
@@ -138,18 +151,8 @@ var drawingHelper = function () {
         ctx.lineJoin = ctx.lineCap = 'round';
         ctx.stroke();
         ctx.closePath();
-        this.sendInstructions(prevX, prevY, currX, currY, this.color, this.pencilSize);
-    };
-
-    this.sendInstructions = function (prevX, prevY, currX, currY, colorX, pencilSize) {
-        text = [prevX, prevY, currX, currY, colorX, pencilSize];
-        var msg = {
-            type: "command",
-            text: text,
-            room: username
-        };
-        channel.socket.send(JSON.stringify(msg));
-    };
+        this.channel.sendInstructions(prevX, prevY, currX, currY, this.color, this.pencilSize);
+    }.bind(this);
 
     this.erase = function () {
         var m = confirm("Want to clear");
@@ -157,14 +160,14 @@ var drawingHelper = function () {
             ctx.clearRect(0, 0, w, h);
             document.getElementById("canvasimg").style.display = "none";
         }
-    };
+    }.bind(this);
 
     this.save = function () {
         document.getElementById("canvasimg").style.border = "2px solid";
         var dataURL = canvas.toDataURL();
         document.getElementById("canvasimg").src = dataURL;
         document.getElementById("canvasimg").style.display = "inline";
-    };
+    }.bind(this);
 
     this.findPos = function (canvas, e) {
         var rect = canvas.getBoundingClientRect();
@@ -172,10 +175,10 @@ var drawingHelper = function () {
             x: (e.clientX - rect.left) / (rect.right - rect.left) * canvas.width,
             y: (e.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
         };
-    };
+    }.bind(this);
 
     this.shapeDraw = function (obj) {
-        var canvas = this.canvas
+        var canvas = this.canvas;
         if (drawShape && !obj.classList.contains("shape-on")) {
             document.getElementsByClassName("shape-on")[0].classList.remove("shape-on");
         }
@@ -212,7 +215,7 @@ var drawingHelper = function () {
                     mouse.x = ev.clientX + document.body.scrollLeft;
                     mouse.y = ev.clientY + document.body.scrollTop;
                 }
-            };
+            }
 
             canvas.addEventListener("mousedown", drawDown = function (e) {
                 if (element !== null) {
@@ -273,45 +276,46 @@ var drawingHelper = function () {
                 findxy('out', e)
             }, false);
         }
-    };
+    }.bind(this);
 
-    this.pick = function() {
-        var picker2 = document.getElementById("color-picker");
-        var findxy = this.findxy;
-        var canvas = this.canvas;
-        if (picker2.className != "picker-on") {
+    this.pick = function () {
+        var helper = this;
+        var findxy = helper.findxy;
+        var canvas = helper.canvas;
+        var pickerCanvas = helper.pickerCanvas;
+        if (pickerCanvas.className !== "picker-on") {
             canvas.style.cursor = "crosshair";
-            picker2.className = "picker-on";
+            pickerCanvas.className = "picker-on";
 
             var context = canvas.getContext('2d');
             canvas.addEventListener("mousemove", mousePicker = function (e) {
-                var pos = findPos(canvas, e);
+                var pos = this.findPos(canvas, e);
                 var x = pos.x;
                 var y = pos.y;
                 var coord = "x=" + x + ", y=" + y;
                 var p = context.getImageData(x, y, 1, 1).data;
-                if (p[0] == 0 && p[1] == 0 && p[2] == 0 && p[3] == 0) {
+                if (p[0] === 0 && p[1] === 0 && p[2] === 0 && p[3] === 0) {
                     hex = "#ffffff";
                 } else {
                     var hex = "#" + ("000000" + rgbToHex(p[0], p[1], p[2])).slice(-6);
                 }
                 document.styleSheets[2].insertRule("input[type=range]::-webkit-slider-thumb { background: " + hex + "; }", document.styleSheets[2].cssRules.length);
-            }, false);
+            }.bind(this), false);
 
             canvas.addEventListener("click", pickedColor = function (e) {
                 var rect = canvas.getBoundingClientRect();
                 var x = (e.clientX - rect.left) / (rect.right - rect.left) * canvas.width;
                 var y = (e.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height;
                 var p = context.getImageData(x, y, 1, 1).data;
-                if (p[0] == 0 && p[1] == 0 && p[2] == 0 && p[3] == 0) {
+                if (p[0] === 0 && p[1] === 0 && p[2] === 0 && p[3] === 0) {
                     hex = "#ffffff";
                 } else {
                     var hex = "#" + ("000000" + rgbToHex(p[0], p[1], p[2])).slice(-6);
                 }
-                colorX = hex;
+                helper.color = hex;
                 canvas.removeEventListener("mousemove", mousePicker);
                 canvas.style.cursor = "auto";
-                picker2.className = "";
+                pickerCanvas.className = "";
                 canvas.removeEventListener("mousemove", mousePicker);
 
 
@@ -340,7 +344,7 @@ var drawingHelper = function () {
             canvas.removeEventListener("mouseout", mouseout, false);
         } else {
             canvas.style.cursor = "auto";
-            picker2.className = "";
+            pickerCanvas.className = "";
             canvas.removeEventListener("mousemove", mousePicker);
 
             canvas.addEventListener("mousemove", mousemove = function (e) {
@@ -360,6 +364,5 @@ var drawingHelper = function () {
                 findxy('out', e)
             }, false);
         }
-    }
-
+    }.bind(this);
 };

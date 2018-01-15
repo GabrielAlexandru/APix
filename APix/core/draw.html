@@ -4,7 +4,7 @@
     {% load static %}
     <link rel="stylesheet" href={% static "core/css/draw.css" %}>
     <script src={% static "core/js/channel.js" %}></script>
-    <script src={% static "core/js/draw.js" %}></script>
+    <script src={% static "core/js/drawHelper.js" %}></script>
     <script src={% static "core/js/base.js" %}></script>
 {% endblock %}
 
@@ -13,14 +13,14 @@
 {% block tools %}
     <div id="tools">
         <div id="colors">
-            <div style="background:green;" id="green" onclick="color(this)"></div>
-            <div style="background:blue;" id="blue" onclick="color(this)"></div>
-            <div style="background:red;" id="red" onclick="color(this)"></div>
-            <div style="background:yellow;" id="yellow" onclick="color(this)"></div>
-            <div style="background:orange;" id="orange" onclick="color(this)"></div>
-            <div style="background:black;" id="black" onclick="color(this)"></div>
-            <div style="background:white;" id="white" onclick="color(this)"></div>
-            <div id="color-div" onclick="color(this)" style="background-position: center; background-image: url({% static "img/picker.png" %});">
+            <div style="background:green;" id="green" onclick="drawHelper.colorSwitch(this)"></div>
+            <div style="background:blue;" id="blue" onclick="drawHelper.colorSwitch(this)"></div>
+            <div style="background:red;" id="red" onclick="drawHelper.colorSwitch(this)"></div>
+            <div style="background:yellow;" id="yellow" onclick="drawHelper.colorSwitch(this)"></div>
+            <div style="background:orange;" id="orange" onclick="drawHelper.colorSwitch(this)"></div>
+            <div style="background:black;" id="black" onclick="drawHelper.colorSwitch(this)"></div>
+            <div style="background:white;" id="white" onclick="drawHelper.colorSwitch(this)"></div>
+            <div id="color-div" onclick="drawHelper.colorSwitch(this)" style="background-position: center; background-image: url({% static "img/picker.png" %});">
                 <input type="color" name="color-changer" id="picker">
             </div>
         </div>
@@ -47,7 +47,7 @@
         <div class="spacer"></div>
         <div id="color-picker-parent" class="tool-button">
             <span class="tooltiptext">Color-picker</span>
-            <div id="color-picker" onclick="pick()" style="background-image: url({% static "img/color-picker.png" %});"></div>
+            <div id="picker-canvas" onclick="drawHelper.pick()" style="background-image: url({% static "img/color-picker.png" %});"></div>
         </div>
         <div class="spacer"></div>
         <div id="download" class="tool-button" style="background-image: url({% static "img/download.png" %});">

@@ -1,6 +1,7 @@
 var username;
 var channel;
 var workspace;
+var drawHelper;
 var tic = false;
 var isAndroid = navigator.userAgent.toLowerCase().indexOf("android") > -1;
 
@@ -9,7 +10,7 @@ function getLoggedUsers(container) {
     var url = "/apix/get-logged-users";
 
     xmlhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
+        if (this.readyState === 4 && this.status === 200) {
 
             while (container.hasChildNodes()) {
                 container.removeChild(container.lastChild);
@@ -22,8 +23,8 @@ function getLoggedUsers(container) {
             container.appendChild(userOption);
 
             for (i in usersJson) {
-                if (!(usersJson[i]["username"] == username)) {
-                    var userOption = document.createElement("option");
+                if (!(usersJson[i]["username"] === username)) {
+                    userOption = document.createElement("option");
                     userOption.value = usersJson[i]["username"];
                     userOption.innerText = usersJson[i]["username"];
                     container.appendChild(userOption);
@@ -60,13 +61,22 @@ window.onload = function () {
         return;
     }
 
-    username = document.getElementById("username").innerText;
-    init_draw();
     channel = new Channel();
     channel.initSocket(username, workspace);
 
+    drawHelper = new DrawHelper(channel);
+    var canvas = document.getElementById("collab-drawing");
+    var sizeRange = document.getElementById("size-range");
+    var picker = document.getElementById("picker");
+    var pickerCanvas = document.getElementById("picker-canvas");
+    drawHelper.initCanvas(canvas);
+    drawHelper.initSizeRange(sizeRange);
+    drawHelper.initPicker(picker);
+    drawHelper.initPickerCanvas(pickerCanvas);
+
+
     getLoggedUsers(loggedUsersContainer);
     window.setInterval(function () {
-        channel.sendCanvasCopy();
+        channel.sendCanvasCopy(drawHelper.canvas);
     }, 500);
 };
