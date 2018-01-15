@@ -165,7 +165,8 @@ var DrawHelper = function (channel) {
         ctx.lineJoin = ctx.lineCap = 'round';
         ctx.stroke();
         ctx.closePath();
-        this.channel.sendInstructions(prevX, prevY, currX, currY, this.color, this.pencilSize);
+        //this.channel.sendInstructions(prevX, prevY, currX, currY, this.color, this.pencilSize);
+        //overloads socket, sending canvas copies every 1 second is lot better.
     }.bind(this);
 
     this.erase = function () {
@@ -174,6 +175,11 @@ var DrawHelper = function (channel) {
             ctx.clearRect(0, 0, w, h);
             document.getElementById("canvasimg").style.display = "none";
         }
+    }.bind(this);
+
+    this.clearCanvas = function() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.channel.sendClearCanvas();
     }.bind(this);
 
     this.save = function () {

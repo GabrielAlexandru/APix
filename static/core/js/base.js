@@ -2,7 +2,6 @@ var username;
 var channel;
 var workspace;
 var drawHelper;
-var tic = false;
 var isAndroid = navigator.userAgent.toLowerCase().indexOf("android") > -1;
 
 function getLoggedUsers(container) {
@@ -49,10 +48,6 @@ window.onload = function () {
 
 
     if (isAndroid) {
-        window.setInterval(function () {
-            tic = true;
-        }, 1000);
-
         channel = new Channel();
         channel.initSocket(username, workspace);
 
@@ -78,5 +73,5 @@ window.onload = function () {
     getLoggedUsers(loggedUsersContainer);
     window.setInterval(function () {
         channel.sendCanvasCopy(drawHelper.canvas);
-    }, 500);
+    }, 1000);
 };
