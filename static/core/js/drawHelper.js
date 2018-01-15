@@ -19,11 +19,11 @@ var DrawHelper = function (channel) {
     this.ctx = null;
     this.rect = null;
     this.sizeRange = null;
-    this.picker = document.getElementById("picker");
+    this.picker = null;
     this.pickerCanvas = null;
     this.color = "black";
     this.pencilSize = 5;
-    this.captures = document.getElementById("captures");
+    this.captures = null;
     this.captureList = [];
 
     this.defaultDrawingON = function (canvas) {
@@ -71,6 +71,10 @@ var DrawHelper = function (channel) {
 
     this.initPicker = function (picker) {
         this.picker = picker;
+    }.bind(this);
+
+    this.initCaptures = function (captures) {
+        this.captures = captures;
     }.bind(this);
 
     this.initPickerCanvas = function (pickerCanvas) {
@@ -208,8 +212,11 @@ var DrawHelper = function (channel) {
             var container = document.getElementById("content");
             var fakeCanvas = canvas.cloneNode(true);
             fakeCanvas.style.cursor = "crosshair";
-            //fakeCanvas.style.opacity = "0.5";
-            canvas.style.display = "none";
+            fakeCanvas.style.opacity = "0.5";
+            fakeCanvas.style.position = "absolute";
+            fakeCanvas.style.width = canvas.style.width;
+            fakeCanvas.style.height = canvas.style.height;
+            // canvas.style.display = "none";
             var ctx = fakeCanvas.getContext("2d");
             ctx.clearRect(0, 0, fakeCanvas.width, fakeCanvas.height);
             container.insertBefore(fakeCanvas, container.childNodes[0]);
