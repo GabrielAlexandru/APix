@@ -362,7 +362,27 @@ var DrawHelper = function (channel) {
         imgDiv.classList.add("capture");
         imgDiv.src = img;
         helper.captures.append(imgDiv);
-        console.log(imgDiv);
 
+    }.bind(this);
+
+    this.uploadImg = function () {
+        var helper = this;
+        var imgInput = document.createElement("input");
+        var imgDiv = document.createElement("img");
+        imgDiv.classList.add("capture");
+        imgInput.type = "file";
+        imgInput.display = "none";
+        document.body.appendChild(imgInput);
+        imgInput.click();
+
+        imgInput.addEventListener("change", function (e) {
+            var freader = new FileReader();
+            freader.readAsDataURL(imgInput.files[0]);
+                freader.onloadend = function (e) {
+                imgDiv.src = e.target.result;
+            };
+        },false);
+        helper.captures.appendChild(imgDiv);
+        document.body.removeChild(imgInput);
     }.bind(this);
 };

@@ -53,13 +53,14 @@
     margin: auto;
     cursor: pointer;
 }
-#image-processing{
+#image-processing, #image-processing2{
+    margin-bottom: 10px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-evenly;
 }
-#download-parent, #download-png-parent, #download-svg-parent, #clear-canvas-parent{
+#download-parent, #download-png-parent, #download-svg-parent, #clear-canvas-parent, #upload-image-parent{
     width: 60px;
     height: 60px;
     margin: auto;
@@ -71,14 +72,14 @@
     background-position: center;
 }
 
-#download, #download-png, #download-svg, #clear-canvas {
+#download, #download-png, #download-svg, #clear-canvas, #upload-image {
     width: 60px;
     height: 60px;
     margin: auto;
     cursor: pointer;
 }
 
-#clear-canvas:hover, .capture:hover, #rectangle:hover, #circle:hover, #picker-canvas:hover, #download:hover, #download-png:hover, #download-svg:hover {
+#upload-image:hover, #clear-canvas:hover, .capture:hover, #rectangle:hover, #circle:hover, #picker-canvas:hover, #download:hover, #download-png:hover, #download-svg:hover {
     opacity: 0.5;
     -webkit-transition: opacity 0.2s;
     transition: opacity 0.2s;
