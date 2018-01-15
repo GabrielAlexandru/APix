@@ -53,11 +53,6 @@ var DrawHelper = function (channel) {
         canvas.width = Math.ceil(canvas.width * 2);
         canvas.height = Math.ceil(canvas.height * 2);
 
-        w = canvas.width;
-        h = canvas.height;
-
-
-
         this.canvas = canvas;
         this.rect = canvas.getBoundingClientRect();
         this.ctx = canvas.getContext("2d");
@@ -183,7 +178,7 @@ var DrawHelper = function (channel) {
         }
     }.bind(this);
 
-    this.clearCanvas = function() {
+    this.clearCanvas = function () {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.channel.sendClearCanvas();
     }.bind(this);
@@ -204,103 +199,62 @@ var DrawHelper = function (channel) {
     }.bind(this);
 
     this.shapeDraw = function (obj) {
-        var canvas = this.canvas;
         if (drawShape && !obj.classList.contains("shape-on")) {
             document.getElementsByClassName("shape-on")[0].classList.remove("shape-on");
         }
         var shape = obj.id;
+
+        var canvas = this.canvas;
         if (!obj.classList.contains("shape-on")) {
             drawShape = true;
-            canvas.style.cursor = "crosshair";
             obj.classList.add("shape-on");
 
-            canvas.removeEventListener("mousemove", mousemove, false);
-            canvas.removeEventListener("mousedown", mousedown, false);
-            canvas.removeEventListener("mouseup", mouseup, false);
-            canvas.removeEventListener("mouseout", mouseout, false);
+            var container = document.getElementById("content");
+            var fakeCanvas = canvas.cloneNode(true);
+            fakeCanvas.style.cursor = "crosshair";
+            //fakeCanvas.style.opacity = "0.5";
+            canvas.style.display = "none";
+            var ctx = fakeCanvas.getContext("2d");
+            ctx.clearRect(0, 0, fakeCanvas.width, fakeCanvas.height);
+            container.insertBefore(fakeCanvas, container.childNodes[0]);
+            var rect = fakeCanvas.getBoundingClientRect();
 
-            var isDrawing = false;
             var startX;
             var startY;
-            var lastX;
-            var lastY;
-            var element = null;
-            var mouse = {
-                x: 0,
-                y: 0,
-                startX: 0,
-                startY: 0
-            };
 
-            function setMousePosition(e) {
-                var ev = e || window.event; //Moz || IE
-                if (ev.pageX) { //Moz
-                    mouse.x = ev.pageX + window.pageXOffset;
-                    mouse.y = ev.pageY + window.pageYOffset;
-                } else if (ev.clientX) { //IE
-                    mouse.x = ev.clientX + document.body.scrollLeft;
-                    mouse.y = ev.clientY + document.body.scrollTop;
-                }
-            }
+            fakeCanvas.addEventListener("mousedown", mousedown = function (e) {
+                startX = (e.clientX - rect.left) / (rect.right - rect.left) * fakeCanvas.width;
+                startY = (e.clientY - rect.top) / (rect.bottom - rect.top) * fakeCanvas.height;
+            }, false);
 
-            canvas.addEventListener("mousedown", drawDown = function (e) {
-                if (element !== null) {
-                    element = null;
-                    canvas.style.cursor = "default";
-                    console.log("finsihed.");
-                } else {
-                    console.log("begun.");
-                    mouse.startX = mouse.x;
-                    mouse.startY = mouse.y;
-                    element = document.createElement('div');
-                    element.className = 'rectangleLive';
-                    element.style.position = 'absolute';
-                    element.style.border = this.pencilSize + 'px solid ' + this.color;
-                    element.style.left = mouse.x + 'px';
-                    element.style.top = mouse.y + 'px';
-                    document.getElementById("content").appendChild(element);
-                }
-            }.bind(this));
-            canvas.addEventListener("mousemove", drawMove = function (e) {
-                setMousePosition(e);
-                if (element !== null) {
-                    element.style.width = Math.abs(mouse.x - mouse.startX) + 'px';
-                    element.style.height = Math.abs(mouse.y - mouse.startY) + 'px';
-                    element.style.left = (mouse.x - mouse.startX < 0) ? mouse.x + 'px' : mouse.startX + 'px';
-                    element.style.top = (mouse.y - mouse.startY < 0) ? mouse.y + 'px' : mouse.startY + 'px';
-                }
-            });
-            // canvas.addEventListener("mouseup", drawUp = function (e) {
-            //     ctx.beginPath();
-            //     ctx.strokeStyle = colorX;
-            //     ctx.lineWidth = pencilSize;
-            //     ctx.rect(startX,startY,pos.x-startX,pos.y-startY);
-            //     ctx.stroke();
-            //     isDrawing = false;
-            // });
+            fakeCanvas.addEventListener("mousemove", mousemove = function (e) {
+                console.log(currX, currY);
+                currX = (e.clientX - rect.left) / (rect.right - rect.left) * fakeCanvas.width;
+                currY = (e.clientY - rect.top) / (rect.bottom - rect.top) * fakeCanvas.height;
+                ctx.beginPath();
+                ctx.strokeStyle = this.color;
+                ctx.lineWidth = this.pencilSize;
+                ctx.rect(startX, startY, currX - startX, currY - startY);
+                ctx.clearRect(0, 0, fakeCanvas.width, fakeCanvas.height);
+                ctx.stroke();
+            }.bind(this), false);
 
+            fakeCanvas.addEventListener("mouseup", mouseup = function (e) {
+                currX = (e.clientX - rect.left) / (rect.right - rect.left) * fakeCanvas.width;
+                currY = (e.clientY - rect.top) / (rect.bottom - rect.top) * fakeCanvas.height;
+                this.ctx.beginPath();
+                this.ctx.strokeStyle = this.color;
+                this.ctx.lineWidth = this.pencilSize;
+                this.ctx.rect(startX, startY, currX - startX, currY - startY);
+                this.ctx.stroke();
+                fakeCanvas.remove();
+                canvas.style.display = "block";
+                drawShape = false;
+                obj.classList.remove("shape-on");
+            }.bind(this), false);
         } else {
-            drawShape = false;
             canvas.style.cursor = "auto";
             obj.classList.remove("shape-on");
-            canvas.removeEventListener("mousemove", drawDown, false);
-            canvas.removeEventListener("mousemove", drawMove, false);
-            // canvas.removeEventListener("mousemove", drawUp, false);
-
-            var findxy = this.findxy;
-
-            canvas.addEventListener("mousemove", mousemove = function (e) {
-                findxy('move', e)
-            }, false);
-            canvas.addEventListener("mousedown", mousedown = function (e) {
-                findxy('down', e)
-            }, false);
-            canvas.addEventListener("mouseup", mouseup = function (e) {
-                findxy('up', e)
-            }, false);
-            canvas.addEventListener("mouseout", mouseout = function (e) {
-                findxy('out', e)
-            }, false);
         }
     }.bind(this);
 
@@ -381,14 +335,14 @@ var DrawHelper = function (channel) {
         svg.appendChild(imgDiv);
         var serializer = new XMLSerializer();
         var source = serializer.serializeToString(svg);
-        if(!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)){
+        if (!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)) {
             source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
         }
-        if(!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)){
+        if (!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)) {
             source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
         }
         source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
-        var url = "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(source);
+        var url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
         var link = document.createElement("a");
         link.href = url;
         link.download = "YourSVG.svg";
