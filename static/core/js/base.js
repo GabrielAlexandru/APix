@@ -64,10 +64,12 @@ window.onload = function () {
     var sizeRange = document.getElementById("size-range");
     var picker = document.getElementById("picker");
     var pickerCanvas = document.getElementById("picker-canvas");
+    var captures = document.getElementById("captures");
     drawHelper.initCanvas(canvas);
     drawHelper.initSizeRange(sizeRange);
     drawHelper.initPicker(picker);
     drawHelper.initPickerCanvas(pickerCanvas);
+    drawHelper.initCaptures(captures);
 
 
     getLoggedUsers(loggedUsersContainer);

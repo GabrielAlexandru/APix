@@ -19,11 +19,11 @@ var DrawHelper = function (channel) {
     this.ctx = null;
     this.rect = null;
     this.sizeRange = null;
-    this.picker = document.getElementById("picker");
+    this.picker = null;
     this.pickerCanvas = null;
     this.color = "black";
     this.pencilSize = 5;
-    this.captures = document.getElementById("captures");
+    this.captures = null;
     this.captureList = [];
 
     this.defaultDrawingON = function (canvas) {
@@ -76,6 +76,10 @@ var DrawHelper = function (channel) {
 
     this.initPicker = function (picker) {
         this.picker = picker;
+    }.bind(this);
+
+    this.initCaptures = function (captures) {
+        this.captures = captures;
     }.bind(this);
 
     this.initPickerCanvas = function (pickerCanvas) {
