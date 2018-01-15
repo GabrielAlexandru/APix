@@ -211,15 +211,12 @@ var DrawHelper = function (channel) {
 
             var container = document.getElementById("content");
             var fakeCanvas = canvas.cloneNode(true);
-            fakeCanvas.style.cursor = "crosshair";
-            fakeCanvas.style.opacity = "0.5";
-            fakeCanvas.style.position = "absolute";
-            fakeCanvas.style.width = canvas.style.width;
-            fakeCanvas.style.height = canvas.style.height;
-            // canvas.style.display = "none";
+            fakeCanvas.id = "fake-canvas";
             var ctx = fakeCanvas.getContext("2d");
             ctx.clearRect(0, 0, fakeCanvas.width, fakeCanvas.height);
             container.insertBefore(fakeCanvas, container.childNodes[0]);
+            fakeCanvas.clientWidth = canvas.clientWidth;
+            fakeCanvas.clientHeight = canvas.clientHeight;
             var rect = fakeCanvas.getBoundingClientRect();
 
             var startX;
@@ -231,7 +228,6 @@ var DrawHelper = function (channel) {
             }, false);
 
             fakeCanvas.addEventListener("mousemove", mousemove = function (e) {
-                console.log(currX, currY);
                 currX = (e.clientX - rect.left) / (rect.right - rect.left) * fakeCanvas.width;
                 currY = (e.clientY - rect.top) / (rect.bottom - rect.top) * fakeCanvas.height;
                 ctx.beginPath();
@@ -256,7 +252,6 @@ var DrawHelper = function (channel) {
                 obj.classList.remove("shape-on");
             }.bind(this), false);
         } else {
-            canvas.style.cursor = "auto";
             obj.classList.remove("shape-on");
         }
     }.bind(this);
