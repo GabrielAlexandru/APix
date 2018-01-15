@@ -59,7 +59,7 @@
     flex-wrap: wrap;
     justify-content: space-evenly;
 }
-#download-parent, #download-png-parent, #download-svg-parent{
+#download-parent, #download-png-parent, #download-svg-parent, #clear-canvas-parent{
     width: 60px;
     height: 60px;
     margin: auto;
@@ -71,14 +71,14 @@
     background-position: center;
 }
 
-#download, #download-png, #download-svg {
+#download, #download-png, #download-svg, #clear-canvas {
     width: 60px;
     height: 60px;
     margin: auto;
     cursor: pointer;
 }
 
-.capture:hover, #rectangle:hover, #circle:hover, #picker-canvas:hover, #download:hover, #download-png:hover, #download-svg:hover {
+#clear-canvas:hover, .capture:hover, #rectangle:hover, #circle:hover, #picker-canvas:hover, #download:hover, #download-png:hover, #download-svg:hover {
     opacity: 0.5;
     -webkit-transition: opacity 0.2s;
     transition: opacity 0.2s;
