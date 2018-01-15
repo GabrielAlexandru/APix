@@ -314,3 +314,7 @@ input[type=range]:focus::-ms-fill-upper {
 .picker-on {
     opacity: 0.5;
 }
+
+.shape-on {
+    opacity: 0.5;
+}

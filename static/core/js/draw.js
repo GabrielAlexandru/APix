@@ -5,12 +5,14 @@ var canvas, ctx, flag = false,
     currY = 0,
     dot_flag = false,
     sizeRange,
-    picker;
+    picker,
+    drawMouse = false,
+    drawShape = false;
 
 var rect;
 
 var colorX = "black",
-    y = 5;
+    pencilSize = 5;
 
 function init_draw() {
     sizeRange = document.getElementById("size-range");
@@ -24,7 +26,7 @@ function init_draw() {
     h = canvas.height;
 
     sizeRange.addEventListener("input", function (e) {
-        y = Math.floor(sizeRange.value/10);
+        pencilSize = Math.floor(sizeRange.value/10);
     }, false);
     canvas.addEventListener("mousemove", mousemove = function (e) {
         findxy('move', e)
@@ -72,7 +74,6 @@ function color(obj) {
             colorX = "white";
             break;
     }
-    if (colorX == "white") y = 14;
     document.styleSheets[2].insertRule("input[type=range]::-webkit-slider-thumb { background: " + colorX + "; }", document.styleSheets[2].cssRules.length);
 }
 
@@ -81,16 +82,16 @@ function draw() {
     ctx.moveTo(prevX, prevY);
     ctx.lineTo(currX, currY);
     ctx.strokeStyle = colorX;
-    ctx.lineWidth = y;
+    ctx.lineWidth = pencilSize;
     ctx.lineJoin = ctx.lineCap = 'round';
     ctx.stroke();
     ctx.closePath();
-    sendInstructions(prevX, prevY, currX, currY, colorX, y)
+    sendInstructions(prevX, prevY, currX, currY, colorX, pencilSize)
     console.log("finshed action");
 }
 
-function sendInstructions(prevX, prevY, currX, currY, colorX, y) {
-    text = [prevX, prevY, currX, currY, colorX, y];
+function sendInstructions(prevX, prevY, currX, currY, colorX, pencilSize) {
+    text = [prevX, prevY, currX, currY, colorX, pencilSize];
     var username = document.getElementById("username").innerText;
     var msg = {
         type: "command",
@@ -133,7 +134,7 @@ function findxy(res, e) {
             dot_flag = false;
         }
     }
-    if (res == 'up' || res == "out") {
+    if(res == 'up' || res == 'out'){
         flag = false;
     }
     if (res == 'move') {
@@ -159,6 +160,103 @@ function rgbToHex(r, g, b) {
     if (r > 255 || g > 255 || b > 255)
         throw "Invalid color component";
     return ((r << 16) | (g << 8) | b).toString(16);
+}
+
+function shapeDraw(obj) {
+    if(drawShape && !obj.classList.contains("shape-on")){
+        document.getElementsByClassName("shape-on")[0].classList.remove("shape-on");
+    }
+    var shape = obj.id;
+    if(!obj.classList.contains("shape-on")) {
+        drawShape = true;
+        canvas.style.cursor = "crosshair";
+        obj.classList.add("shape-on");
+
+        canvas.removeEventListener("mousemove", mousemove, false);
+        canvas.removeEventListener("mousedown", mousedown, false);
+        canvas.removeEventListener("mouseup", mouseup, false);
+        canvas.removeEventListener("mouseout", mouseout, false);
+
+        var isDrawing = false;
+        var startX;
+        var startY;
+        var lastX;
+        var lastY;
+        var element = null;
+        var mouse = {
+            x: 0,
+            y: 0,
+            startX: 0,
+            startY: 0
+        };
+        function setMousePosition(e) {
+            var ev = e || window.event; //Moz || IE
+            if (ev.pageX) { //Moz
+                mouse.x = ev.pageX + window.pageXOffset;
+                mouse.y = ev.pageY + window.pageYOffset;
+            } else if (ev.clientX) { //IE
+                mouse.x = ev.clientX + document.body.scrollLeft;
+                mouse.y = ev.clientY + document.body.scrollTop;
+            }
+        };
+
+        canvas.addEventListener("mousedown", drawDown = function (e) {
+            if (element !== null) {
+                element = null;
+                canvas.style.cursor = "default";
+                console.log("finsihed.");
+            } else {
+                console.log("begun.");
+                mouse.startX = mouse.x;
+                mouse.startY = mouse.y;
+                element = document.createElement('div');
+                element.className = 'rectangleLive';
+                element.style.position = 'absolute';
+                element.style.border = pencilSize + 'px solid ' + colorX;
+                element.style.left = mouse.x + 'px';
+                element.style.top = mouse.y + 'px';
+                document.getElementById("content").appendChild(element);
+            }
+        });
+        canvas.addEventListener("mousemove", drawMove = function (e) {
+            setMousePosition(e);
+            if (element !== null) {
+                element.style.width = Math.abs(mouse.x - mouse.startX) + 'px';
+                element.style.height = Math.abs(mouse.y - mouse.startY) + 'px';
+                element.style.left = (mouse.x - mouse.startX < 0) ? mouse.x + 'px' : mouse.startX + 'px';
+                element.style.top = (mouse.y - mouse.startY < 0) ? mouse.y + 'px' : mouse.startY + 'px';
+            }
+        });
+        // canvas.addEventListener("mouseup", drawUp = function (e) {
+        //     ctx.beginPath();
+        //     ctx.strokeStyle = colorX;
+        //     ctx.lineWidth = pencilSize;
+        //     ctx.rect(startX,startY,pos.x-startX,pos.y-startY);
+        //     ctx.stroke();
+        //     isDrawing = false;
+        // });
+
+    } else {
+        drawShape = false;
+        canvas.style.cursor = "auto";
+        obj.classList.remove("shape-on");
+        canvas.removeEventListener("mousemove", drawDown, false);
+        canvas.removeEventListener("mousemove", drawMove, false);
+        // canvas.removeEventListener("mousemove", drawUp, false);
+
+        canvas.addEventListener("mousemove", mousemove = function (e) {
+            findxy('move', e)
+        }, false);
+        canvas.addEventListener("mousedown", mousedown = function (e) {
+            findxy('down', e)
+        }, false);
+        canvas.addEventListener("mouseup", mouseup = function (e) {
+            findxy('up', e)
+        }, false);
+        canvas.addEventListener("mouseout", mouseout = function (e) {
+            findxy('out', e)
+        }, false);
+    }
 }
 
 function pick() {
@@ -202,12 +300,16 @@ function pick() {
                 findxy('move', e)
             }, false);
             canvas.addEventListener("mousedown", mousedown = function (e) {
+                flag = true;
+                dot_flag = true;
                 findxy('down', e)
             }, false);
             canvas.addEventListener("mouseup", mouseup = function (e) {
+                flag = false;
                 findxy('up', e)
             }, false);
             canvas.addEventListener("mouseout", mouseout = function (e) {
+                flag = false;
                 findxy('out', e)
             }, false);
             canvas.removeEventListener("click", pickedColor);
@@ -226,12 +328,16 @@ function pick() {
             findxy('move', e)
         }, false);
         canvas.addEventListener("mousedown", mousedown = function (e) {
+            flag = true;
+            dot_flag = true;
             findxy('down', e)
         }, false);
         canvas.addEventListener("mouseup", mouseup = function (e) {
+            flag = false;
             findxy('up', e)
         }, false);
         canvas.addEventListener("mouseout", mouseout = function (e) {
+            flag = false;
             findxy('out', e)
         }, false);
     }
