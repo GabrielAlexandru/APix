@@ -22,9 +22,6 @@ function init_draw() {
     ctx = canvas.getContext("2d");
     w = canvas.width;
     h = canvas.height;
-    //bitchass fix, maybe
-    ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, w, h);
 
     sizeRange.addEventListener("input", function (e) {
         y = Math.floor(sizeRange.value/10);
@@ -177,7 +174,11 @@ function pick() {
             var y = pos.y;
             var coord = "x=" + x + ", y=" + y;
             var p = context.getImageData(x, y, 1, 1).data;
-            var hex = "#" + ("000000" + rgbToHex(p[0], p[1], p[2])).slice(-6);
+            if(p[0] == 0 && p[1] == 0 && p[2] == 0 && p[3] == 0){
+                hex = "#ffffff";
+            } else {
+                var hex = "#" + ("000000" + rgbToHex(p[0], p[1], p[2])).slice(-6);
+            }
             document.styleSheets[2].insertRule("input[type=range]::-webkit-slider-thumb { background: " + hex + "; }", document.styleSheets[2].cssRules.length);
         }, false);
 
@@ -186,7 +187,11 @@ function pick() {
             var x = (e.clientX - rect.left) / (rect.right - rect.left) * canvas.width;
             var y = (e.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height;
             var p = context.getImageData(x, y, 1, 1).data;
-            var hex = "#" + ("000000" + rgbToHex(p[0], p[1], p[2])).slice(-6);
+            if(p[0] == 0 && p[1] == 0 && p[2] == 0 && p[3] == 0){
+                hex = "#ffffff";
+            } else {
+                var hex = "#" + ("000000" + rgbToHex(p[0], p[1], p[2])).slice(-6);
+            }
             colorX = hex;
             canvas.removeEventListener("mousemove", mousePicker);
             canvas.style.cursor = "auto";
