@@ -247,12 +247,12 @@ var DrawHelper = function (channel) {
                     element = document.createElement('div');
                     element.className = 'rectangleLive';
                     element.style.position = 'absolute';
-                    element.style.border = pencilSize + 'px solid ' + colorX;
+                    element.style.border = this.pencilSize + 'px solid ' + this.color;
                     element.style.left = mouse.x + 'px';
                     element.style.top = mouse.y + 'px';
                     document.getElementById("content").appendChild(element);
                 }
-            });
+            }.bind(this));
             canvas.addEventListener("mousemove", drawMove = function (e) {
                 setMousePosition(e);
                 if (element !== null) {
