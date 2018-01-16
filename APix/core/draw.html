@@ -48,22 +48,28 @@
         </div>
         <div class="spacer"></div>
         <div id="shapes">
-            <div id="circle" class="tool-button" onclick="drawHelper.shapeDraw(this)">
+            <div class="tool-button">
                 <span class="tooltiptext">Draw circle</span>
+                <div id="circle" onclick="drawHelper.shapeDraw(this)">
+                </div>
             </div>
-            <div id="rectangle" class="tool-button" onclick="drawHelper.shapeDraw(this)">
+            <div class="tool-button">
                 <span class="tooltiptext">Draw rectangle</span>
+                <div id="rectangle" onclick="drawHelper.shapeDraw(this)">
+                </div>
             </div>
         </div>
         <div class="spacer"></div>
         <div id="image-processing">
             <div id="color-picker-parent" class="tool-button">
                 <span class="tooltiptext">Color-picker</span>
-                <div id="picker-canvas" onclick="drawHelper.pick()" style="background-image: url({% static "img/color-picker.png" %});"></div>
+                <div id="picker-canvas" onclick="drawHelper.pick()"
+                     style="background-image: url({% static "img/color-picker.png" %});"></div>
             </div>
             <div id="clear-canvas-parent" class="tool-button">
                 <span class="tooltiptext">Clear Canvas</span>
-                <div id="clear-canvas" onclick="drawHelper.clearCanvas()" style="background-image: url({% static "img/clear2.png" %});"></div>
+                <div id="clear-canvas" onclick="drawHelper.clearCanvas()"
+                     style="background-image: url({% static "img/clear2.png" %});"></div>
             </div>
             <div id="download-parent" class="tool-button">
                 <span class="tooltiptext">Capture</span>

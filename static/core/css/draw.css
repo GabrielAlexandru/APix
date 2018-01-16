@@ -17,9 +17,7 @@
 #fake-canvas {
     width: calc(100% - 32px);
     height: calc(100% - 32px);
-    background: white;
     position: absolute;
-    opacity: 0.5;
     cursor: crosshair;
 }
 
@@ -33,7 +31,8 @@
     flex-direction: row;
     justify-content: space-evenly;
 }
-#captures{
+
+#captures {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -41,12 +40,14 @@
     width: auto;
     height: auto;
 }
+
 .capture {
     width: 40%;
     height: 40%;
     padding-top: 5px;
     cursor: pointer;
 }
+
 #circle {
     border-radius: 50%;
     width: 30px;
@@ -62,19 +63,22 @@
     margin: auto;
     cursor: pointer;
 }
-#image-processing, #image-processing2{
+
+#image-processing, #image-processing2 {
     margin-bottom: 10px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-evenly;
 }
-#download-parent, #download-png-parent, #download-svg-parent, #clear-canvas-parent, #upload-image-parent{
+
+#download-parent, #download-png-parent, #download-svg-parent, #clear-canvas-parent, #upload-image-parent {
     width: 60px;
     height: 60px;
     margin: auto;
     cursor: pointer;
 }
+
 #picker-canvas {
     width: 50px;
     height: 50px;
@@ -173,13 +177,16 @@
     flex-direction: row;
     justify-content: space-between;
 }
-@media screen and (max-width: 767px){
+
+@media screen and (max-width: 767px) {
     #content {
         display: none;
     }
-    #collab-drawing{
+
+    #collab-drawing {
         display: none;
     }
+
     #toolbar {
         width: 100%;
     }
@@ -188,16 +195,21 @@
 .tooltiptext {
     font-size: 0.9em;
     visibility: hidden;
-    width: 120px;
+    width: 135px;
     background-color: rgb(26, 177, 136);
     color: #fff;
     text-align: center;
     border-radius: 6px;
     padding: 5px 0;
     opacity: 0.9;
-    position: absolute;
+    position: fixed;
     margin-top: -20px;
     z-index: 1;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+    pointer-events: none;
 }
 
 .tool-button:hover .tooltiptext {
@@ -338,9 +350,9 @@ input[type=range]:focus::-ms-fill-upper {
 
 #ball {
     position: absolute;
-    top   : 90px;
-    left  : 90px;
-    width : 20px;
+    top: 90px;
+    left: 90px;
+    width: 20px;
     height: 20px;
     background: green;
     border-radius: 100%;
