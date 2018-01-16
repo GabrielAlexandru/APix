@@ -170,24 +170,9 @@ var DrawHelper = function (channel) {
         //overloads socket, sending canvas copies every 1 second is lot better.
     }.bind(this);
 
-    this.erase = function () {
-        var m = confirm("Want to clear");
-        if (m) {
-            ctx.clearRect(0, 0, w, h);
-            document.getElementById("canvasimg").style.display = "none";
-        }
-    }.bind(this);
-
     this.clearCanvas = function () {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.channel.sendClearCanvas();
-    }.bind(this);
-
-    this.save = function () {
-        document.getElementById("canvasimg").style.border = "2px solid";
-        var dataURL = canvas.toDataURL();
-        document.getElementById("canvasimg").src = dataURL;
-        document.getElementById("canvasimg").style.display = "inline";
     }.bind(this);
 
     this.findPos = function (canvas, e) {

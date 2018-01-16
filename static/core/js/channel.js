@@ -18,12 +18,10 @@ var Channel = function () {
 
         this.socket.onmessage = function (e) {
             var message_json = JSON.parse(e.data);
+            var text = message_json['text'];
             if (device === "desktop") {
-
                 if (username !== message_json['username']) {
                     if (message_json['type'] === "command") {
-                        var text = message_json['text'];
-                        //text = [prevX, prevY, currX, currY, x, y];
                         drawHelper.ctx.beginPath();
                         drawHelper.ctx.moveTo(text[0], text[1]);
                         drawHelper.ctx.lineTo(text[2], text[3]);
@@ -46,7 +44,6 @@ var Channel = function () {
                 }
                 if (message_json['type'] === "remote") {
                     console.log("remote");
-                    var text = message_json['text'];
                     // ball = document.getElementById('ball');
                     // maxX = canvas.clientWidth - ball.clientWidth;
                     // maxY = canvas.clientHeight - ball.clientHeight;
