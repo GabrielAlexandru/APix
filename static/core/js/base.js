@@ -1,9 +1,11 @@
 var username;
+var remoteButton;
 var channel;
 var workspace;
 var drawHelper;
 var isAndroid = navigator.userAgent.toLowerCase().indexOf("android") > -1;
 var isFirefox = navigator.userAgent.toLowerCase().indexOf("firefox") > -1;
+
 function getLoggedUsers(container) {
     var xmlhttp = new XMLHttpRequest();
     var url = "/apix/get-logged-users";
@@ -42,22 +44,32 @@ window.onload = function () {
 
     username = document.getElementById("username").innerText;
     var loggedUsersContainer = document.getElementById("logged-users");
-    // if (isAndroid) {
-    //     workspace = "remote";
-    // }
-    workspace = "desktop";
-
-    // if (isAndroid) {
-    //     channel = new Channel();
-    //     channel.initSocket(username, workspace);
-    //
-    //     getLoggedUsers(loggedUsersContainer);
-    //     window.addEventListener('deviceorientation', channel.sendRemotePosition);
-    //     return;
-    // }
 
     channel = new Channel();
     channel.initSocket(username, workspace);
+
+    if (isAndroid) {
+        remoteButton = document.getElementById("username");
+        remoteButton.classList.remove("disabled");
+        remoteButton.onclick = function () {
+            if (remoteButton.innerText === username) {
+                document.getElementById("image-processing3").style.display = "block";
+                remoteButton.innerText = "Remote";
+                workspace = "remote";
+                window.addEventListener("deviceorientation", deviceorientation = function (e) {
+                    channel.sendRemotePosition(e)
+                }, false);
+            }
+            else {
+                document.getElementById("image-processing3").style.display = "none";
+                remoteButton.innerText = username;
+                workspace = "desktop";
+                window.removeEventListener("deviceorientation", deviceorientation, false);
+            }
+        };
+    } else {
+        workspace = "desktop";
+    }
 
     drawHelper = new DrawHelper(channel);
     var canvas = document.getElementById("collab-drawing");
@@ -70,7 +82,6 @@ window.onload = function () {
     drawHelper.initPicker(picker);
     drawHelper.initPickerCanvas(pickerCanvas);
     drawHelper.initCaptures(captures);
-
 
     getLoggedUsers(loggedUsersContainer);
     // window.setInterval(function () {
