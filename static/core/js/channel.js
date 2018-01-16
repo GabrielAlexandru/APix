@@ -45,8 +45,8 @@ var Channel = function () {
                 if (message_json['type'] === "remote") {
                     console.log("remote");
                     this.ball = document.getElementById('ball');
-                    this.maxX = drawHelper.canvas.clientWidth - this.ball.clientWidth;
-                    this.maxY = drawHelper.canvas.clientHeight - this.ball.clientHeight;
+                    this.maxX = drawHelper.canvas.clientWidth;
+                    this.maxY = drawHelper.canvas.clientHeight;
                     var x = text[0];
                     var y = text[1];
                     if (x > 90) {
@@ -57,8 +57,22 @@ var Channel = function () {
                     }
                     x += 90;
                     y += 90;
-                    this.ball.style.top = (this.maxX * x / 180 - 10) + "px";
-                    this.ball.style.left = (this.maxY * y / 180 - 10) + "px";
+                    //console.log((this.maxX * y / 180), (this.maxY * x / 180));
+                    var styleLeft = (this.maxX * y / 180);
+                    var styleTop = this.maxY - (this.maxY * x / 180);
+
+                    if (styleLeft < 10)
+                        styleLeft = 10;
+                    if (styleLeft > this.maxX - 10)
+                        styleLeft = this.maxX - 10;
+
+                    if (styleTop < 10)
+                        styleTop = 10;
+                    if (styleTop > this.maxY - 10)
+                        styleTop = this.maxY - 10;
+
+                    this.ball.style.top = styleTop + "px";
+                    this.ball.style.left = styleLeft + "px";
                 }
             }
         }.bind(this);
@@ -104,7 +118,7 @@ var Channel = function () {
     }.bind(this);
 
     this.sendRemotePosition = function (event) {
-        if (this.socket.readyState === 1) {
+        if (this.socket.readyState === 1 && this.tick === true) {
             var x = event.beta;
             var y = event.gamma;
             var text = [x, y];
@@ -116,6 +130,7 @@ var Channel = function () {
             };
             // if (tic)
             this.socket.send(JSON.stringify(msg));
+
         }
     }.bind(this);
 

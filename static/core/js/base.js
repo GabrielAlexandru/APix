@@ -4,7 +4,6 @@ var workspace;
 var drawHelper;
 var isAndroid = navigator.userAgent.toLowerCase().indexOf("android") > -1;
 var isFirefox = navigator.userAgent.toLowerCase().indexOf("firefox") > -1;
-
 function getLoggedUsers(container) {
     var xmlhttp = new XMLHttpRequest();
     var url = "/apix/get-logged-users";
@@ -40,21 +39,22 @@ function getLoggedUsers(container) {
 }
 
 window.onload = function () {
+
     username = document.getElementById("username").innerText;
     var loggedUsersContainer = document.getElementById("logged-users");
-    if (isAndroid) {
-        workspace = "remote";
-    }
-    else workspace = "desktop";
+    // if (isAndroid) {
+    //     workspace = "remote";
+    // }
+    workspace = "desktop";
 
-    if (isAndroid) {
-        channel = new Channel();
-        channel.initSocket(username, workspace);
-
-        getLoggedUsers(loggedUsersContainer);
-        window.addEventListener('deviceorientation', channel.sendRemotePosition);
-        return;
-    }
+    // if (isAndroid) {
+    //     channel = new Channel();
+    //     channel.initSocket(username, workspace);
+    //
+    //     getLoggedUsers(loggedUsersContainer);
+    //     window.addEventListener('deviceorientation', channel.sendRemotePosition);
+    //     return;
+    // }
 
     channel = new Channel();
     channel.initSocket(username, workspace);

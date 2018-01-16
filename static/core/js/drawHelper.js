@@ -7,6 +7,7 @@ var dot_flag = false;
 var drawMouse = false;
 var drawShape = false;
 
+
 function rgbToHex(r, g, b) {
     if (r > 255 || g > 255 || b > 255)
         throw "Invalid color component";
@@ -26,7 +27,7 @@ var DrawHelper = function (channel) {
     this.captures = null;
     this.captureList = [];
 
-    window.onresize = function (event) {
+    this.recalibrate = function () {
         this.rect = this.canvas.getBoundingClientRect();
         this.ctx = this.canvas.getContext("2d");
         var oldCanvas = this.canvas.toDataURL("image/png");
@@ -36,6 +37,18 @@ var DrawHelper = function (channel) {
             this.ctx.drawImage(img, 0, 0);
         }.bind(this);
     }.bind(this);
+
+    window.onresize = function (event) {
+        this.recalibrate();
+    }.bind(this);
+
+    window.onscroll = function (event) {
+        this.recalibrate();
+    }.bind(this);
+
+    this.onlongtouch = function () {
+        findxy('move', e)
+    };
 
     this.defaultDrawingOn = function (canvas) {
         var findxy = this.findxy;
@@ -51,6 +64,21 @@ var DrawHelper = function (channel) {
         canvas.addEventListener("mouseout", mouseout = function (e) {
             findxy('out', e)
         }, false);
+        if (isAndroid) {
+            canvas.addEventListener("touchmove", mousemove = function (e) {
+                findxy('move', e)
+            }, false);
+            canvas.addEventListener("touchstart", mousedown = function (e) {
+                findxy('down', e)
+            }, false);
+            canvas.addEventListener("touchend", mouseup = function (e) {
+                findxy('up', e)
+            }, false);
+            canvas.addEventListener("touchcancel", mouseout = function (e) {
+                findxy('out', e)
+            }, false);
+        }
+
     }.bind(this);
 
     this.defaultDrawingOff = function (canvas) {
@@ -96,11 +124,20 @@ var DrawHelper = function (channel) {
         var canvas = this.canvas;
         var rect = this.rect;
         var ctx = this.ctx;
+        if (isAndroid) {
+            clientX = e.touches[0].pageX;
+            clientY = e.touches[0].pageY;
+        } else {
+            clientX = e.clientX;
+            clientY = e.clientY;
+        }
         if (res === 'down') {
             prevX = currX;
             prevY = currY;
-            currX = Math.ceil((e.clientX - rect.left) / (rect.right - rect.left) * canvas.width);
-            currY = Math.ceil((e.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height);
+            var clientX;
+            var clientY;
+            currX = Math.ceil((clientX - rect.left) / (rect.right - rect.left) * canvas.width);
+            currY = Math.ceil((clientY - rect.top) / (rect.bottom - rect.top) * canvas.height);
 
             flag = true;
             dot_flag = true;
@@ -120,8 +157,8 @@ var DrawHelper = function (channel) {
             if (flag) {
                 prevX = currX;
                 prevY = currY;
-                currX = Math.ceil((e.clientX - rect.left) / (rect.right - rect.left) * canvas.width);
-                currY = Math.ceil((e.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height);
+                currX = Math.ceil((clientX - rect.left) / (rect.right - rect.left) * canvas.width);
+                currY = Math.ceil((clientY - rect.top) / (rect.bottom - rect.top) * canvas.height);
                 this.draw();
             }
         }
@@ -278,7 +315,7 @@ var DrawHelper = function (channel) {
             fakeCanvas.addEventListener("mousedown", mousedown = function (e) {
                 startX = Math.ceil((e.clientX - rect.left) / (rect.right - rect.left) * fakeCanvas.width);
                 startY = Math.ceil((e.clientY - rect.top) / (rect.bottom - rect.top) * fakeCanvas.height);
-            }, false);
+            }.bind(this), false);
 
             fakeCanvas.addEventListener("mousemove", mousemove = function (e) {
                 currX = Math.ceil((e.clientX - rect.left) / (rect.right - rect.left) * fakeCanvas.width);

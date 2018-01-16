@@ -180,16 +180,30 @@
 
 @media screen and (max-width: 767px) {
     #content {
-        display: none;
+        display: block;
+        margin-left: 0;
+        height: 100%;
+        width: 100%;
+        position: relative !important;
+        overflow: auto;
+        padding: 0;
+        background: #4484ce;
     }
 
     #collab-drawing {
-        display: none;
+        display: block;
+        margin: 8px;
     }
 
     #toolbar {
         width: 100%;
+        position: relative !important;
     }
+
+    #shapes, #shapes + .spacer, #image-processing, #image-processing2, #captures {
+        display: none;
+    }
+
 }
 
 .tooltiptext {
