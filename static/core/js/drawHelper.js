@@ -462,8 +462,7 @@ var DrawHelper = function (channel) {
     this.uploadImg = function () {
         var helper = this;
         var imgInput = document.createElement("input");
-        var imgDiv = document.createElement("img");
-        imgDiv.classList.add("capture");
+        var image = new Image();
         imgInput.type = "file";
         imgInput.display = "none";
         document.body.appendChild(imgInput);
@@ -473,11 +472,10 @@ var DrawHelper = function (channel) {
             var freader = new FileReader();
             freader.readAsDataURL(imgInput.files[0]);
             freader.onloadend = function (e) {
-                imgDiv.src = e.target.result;
+                image.src = e.target.result;
                 helper.ctx.drawImage(imgDiv.src, 0, 0, helper.ctx.width, helper.ctx.height);
             };
         }, false);
-        helper.captures.appendChild(imgDiv);
         document.body.removeChild(imgInput);
     }.bind(this);
 };
