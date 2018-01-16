@@ -44,9 +44,9 @@ var Channel = function () {
                 }
                 if (message_json['type'] === "remote") {
                     console.log("remote");
-                    // ball = document.getElementById('ball');
-                    // maxX = canvas.clientWidth - ball.clientWidth;
-                    // maxY = canvas.clientHeight - ball.clientHeight;
+                    this.ball = document.getElementById('ball');
+                    this.maxX = drawHelper.canvas.clientWidth - this.ball.clientWidth;
+                    this.maxY = drawHelper.canvas.clientHeight - this.ball.clientHeight;
                     var x = text[0];
                     var y = text[1];
                     if (x > 90) {
@@ -57,11 +57,11 @@ var Channel = function () {
                     }
                     x += 90;
                     y += 90;
-                    // ball.style.top = (maxX * x / 180 - 10) + "px";
-                    // ball.style.left = (maxY * y / 180 - 10) + "px";
+                    this.ball.style.top = (this.maxX * x / 180 - 10) + "px";
+                    this.ball.style.left = (this.maxY * y / 180 - 10) + "px";
                 }
             }
-        };
+        }.bind(this);
 
         this.socket.onopen = function () {
             var msg = {

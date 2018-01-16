@@ -47,7 +47,6 @@ window.onload = function () {
     }
     else workspace = "desktop";
 
-
     if (isAndroid) {
         channel = new Channel();
         channel.initSocket(username, workspace);
