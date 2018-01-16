@@ -117,7 +117,6 @@ var DrawHelper = function (channel) {
     }.bind(this);
 
     this.colorSwitch = function (obj) {
-        console.log("emfgt");
         var tmpColor;
         if (document.getElementsByClassName("selected")[0]) {
             document.getElementsByClassName("selected")[0].className = "";
@@ -125,7 +124,12 @@ var DrawHelper = function (channel) {
         this.picker.addEventListener("input", function () {
             tmpColor = this.picker.value;
             this.color = tmpColor;
-            document.styleSheets[2].insertRule("input[type=range]::-webkit-slider-thumb { background: " + tmpColor + "; }", document.styleSheets[2].cssRules.length);
+            if (isFirefox) {
+                document.styleSheets[2].insertRule("input[type=range]::-moz-range-thumb { background: " + tmpColor + "; }", document.styleSheets[2].cssRules.length);
+            }
+            else {
+                document.styleSheets[2].insertRule("input[type=range]::-webkit-slider-thumb { background: " + tmpColor + "; }", document.styleSheets[2].cssRules.length);
+            }
         }.bind(this), false);
         obj.className += "selected";
         switch (obj.id) {
@@ -152,7 +156,12 @@ var DrawHelper = function (channel) {
                 break;
         }
         this.color = tmpColor;
-        document.styleSheets[2].insertRule("input[type=range]::-webkit-slider-thumb { background: " + tmpColor + "; }", document.styleSheets[2].cssRules.length);
+        if (isFirefox) {
+            document.styleSheets[2].insertRule("input[type=range]::-moz-range-thumb { background: " + tmpColor + "; }", document.styleSheets[2].cssRules.length);
+        }
+        else {
+            document.styleSheets[2].insertRule("input[type=range]::-webkit-slider-thumb { background: " + tmpColor + "; }", document.styleSheets[2].cssRules.length);
+        }
 
     }.bind(this);
 
@@ -211,15 +220,21 @@ var DrawHelper = function (channel) {
             //ctx.fill();
         }
 
+        function drawRectangle(x1, y1, x2, y2, ctx, color, pencilSize) {
+            ctx.beginPath();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = pencilSize;
+            ctx.rect(x1, y1, x2 - x1, y2 - y1);
+            ctx.stroke();
+        }
 
         if (drawShape && !obj.classList.contains("shape-on")) {
             nodeList = document.getElementsByClassName("shape-on");
-            for (i = 0; i < nodeList.length; i++) {
+            for (var i = 0; i < nodeList.length; i++) {
                 nodeList[i].classList.remove("shape-on");
             }
         }
-        if (drawShape && obj.classList.contains("shape-on"))
-        {
+        if (drawShape && obj.classList.contains("shape-on")) {
             document.getElementById("fake-canvas").remove();
         }
 
@@ -231,7 +246,7 @@ var DrawHelper = function (channel) {
             drawShape = true;
             obj.classList.add("shape-on");
 
-            var container = document.getElementById("content");
+            var container = this.canvas.parentElement;
             if (document.getElementById("fake-canvas") === null) {
                 fakeCanvas = canvas.cloneNode(true);
                 fakeCanvas.id = "fake-canvas";
@@ -244,9 +259,7 @@ var DrawHelper = function (channel) {
                 fakeCanvas.removeEventListener("mouseup", mouseup, false);
             }
             var ctx = fakeCanvas.getContext("2d");
-            ctx.clearRect(0, 0, fakeCanvas.width, fakeCanvas.height);
             var rect = fakeCanvas.getBoundingClientRect();
-
 
             var startX;
             var startY;
@@ -260,16 +273,11 @@ var DrawHelper = function (channel) {
                 currX = (e.clientX - rect.left) / (rect.right - rect.left) * fakeCanvas.width;
                 currY = (e.clientY - rect.top) / (rect.bottom - rect.top) * fakeCanvas.height;
 
+                ctx.clearRect(0, 0, fakeCanvas.width, fakeCanvas.height);
                 if (shape === "rectangle") {
-                    ctx.beginPath();
-                    ctx.strokeStyle = this.color;
-                    ctx.lineWidth = this.pencilSize;
-                    ctx.rect(startX, startY, currX - startX, currY - startY);
-                    ctx.clearRect(0, 0, fakeCanvas.width, fakeCanvas.height);
-                    ctx.stroke();
+                    drawRectangle(startX, startY, currX, currY, ctx, this.color, this.pencilSize);
                 }
                 if (shape === "circle") {
-                    ctx.clearRect(0, 0, fakeCanvas.width, fakeCanvas.height);
                     drawEllipse(startX, startY, currX, currY, ctx, this.color, this.pencilSize);
                 }
             }.bind(this), false);
@@ -279,19 +287,13 @@ var DrawHelper = function (channel) {
                 currX = (e.clientX - rect.left) / (rect.right - rect.left) * fakeCanvas.width;
                 currY = (e.clientY - rect.top) / (rect.bottom - rect.top) * fakeCanvas.height;
                 if (shape === "rectangle") {
-                    this.ctx.beginPath();
-                    this.ctx.strokeStyle = this.color;
-                    this.ctx.lineWidth = this.pencilSize;
-                    this.ctx.rect(startX, startY, currX - startX, currY - startY);
-                    this.ctx.stroke();
+                    drawRectangle(startX, startY, currX, currY, this.ctx, this.color, this.pencilSize);
                 }
                 if (shape === "circle") {
-                    ctx.clearRect(0, 0, fakeCanvas.width, fakeCanvas.height);
                     drawEllipse(startX, startY, currX, currY, this.ctx, this.color, this.pencilSize);
                 }
 
                 fakeCanvas.remove();
-                canvas.style.display = "block";
                 drawShape = false;
                 obj.classList.remove("shape-on");
             }.bind(this), false);
@@ -321,7 +323,13 @@ var DrawHelper = function (channel) {
                 } else {
                     var hex = "#" + ("000000" + rgbToHex(p[0], p[1], p[2])).slice(-6);
                 }
-                document.styleSheets[2].insertRule("input[type=range]::-webkit-slider-thumb { background: " + hex + "; }", document.styleSheets[2].cssRules.length);
+                if (isFirefox) {
+                    document.styleSheets[2].insertRule("input[type=range]::-moz-range-thumb { background: " + hex + "; }", document.styleSheets[2].cssRules.length);
+                }
+                else {
+                    document.styleSheets[2].insertRule("input[type=range]::-webkit-slider-thumb { background: " + hex + "; }", document.styleSheets[2].cssRules.length);
+                }
+
             }.bind(this), false);
 
             canvas.addEventListener("click", pickedColor = function (e) {
@@ -339,7 +347,6 @@ var DrawHelper = function (channel) {
                 canvas.style.cursor = "auto";
                 pickerCanvas.className = "";
                 canvas.removeEventListener("mousemove", mousePicker);
-
 
                 this.defaultDrawingON(canvas);
                 canvas.removeEventListener("click", pickedColor);
@@ -417,10 +424,10 @@ var DrawHelper = function (channel) {
         imgInput.addEventListener("change", function (e) {
             var freader = new FileReader();
             freader.readAsDataURL(imgInput.files[0]);
-                freader.onloadend = function (e) {
+            freader.onloadend = function (e) {
                 imgDiv.src = e.target.result;
             };
-        },false);
+        }, false);
         helper.captures.appendChild(imgDiv);
         document.body.removeChild(imgInput);
     }.bind(this);

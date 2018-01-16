@@ -3,6 +3,7 @@ var channel;
 var workspace;
 var drawHelper;
 var isAndroid = navigator.userAgent.toLowerCase().indexOf("android") > -1;
+var isFirefox = navigator.userAgent.toLowerCase().indexOf("firefox") > -1;
 
 function getLoggedUsers(container) {
     var xmlhttp = new XMLHttpRequest();
