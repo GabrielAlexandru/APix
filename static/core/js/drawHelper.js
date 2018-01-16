@@ -26,7 +26,18 @@ var DrawHelper = function (channel) {
     this.captures = null;
     this.captureList = [];
 
-    this.defaultDrawingON = function (canvas) {
+    window.onresize = function (event) {
+        this.rect = this.canvas.getBoundingClientRect();
+        this.ctx = this.canvas.getContext("2d");
+        var oldCanvas = this.canvas.toDataURL("image/png");
+        var img = new Image();
+        img.src = oldCanvas;
+        img.onload = function () {
+            this.ctx.drawImage(img, 0, 0);
+        }.bind(this);
+    }.bind(this);
+
+    this.defaultDrawingOn = function (canvas) {
         var findxy = this.findxy;
         canvas.addEventListener("mousemove", mousemove = function (e) {
             findxy('move', e)
@@ -42,7 +53,7 @@ var DrawHelper = function (channel) {
         }, false);
     }.bind(this);
 
-    this.defaultDrawingOFF = function (canvas) {
+    this.defaultDrawingOff = function (canvas) {
         canvas.removeEventListener("mousemove", mousemove, false);
         canvas.removeEventListener("mousedown", mousedown, false);
         canvas.removeEventListener("mouseup", mouseup, false);
@@ -57,7 +68,7 @@ var DrawHelper = function (channel) {
         this.rect = canvas.getBoundingClientRect();
         this.ctx = canvas.getContext("2d");
 
-        this.defaultDrawingON(canvas);
+        this.defaultDrawingOn(canvas);
     }.bind(this);
 
     this.initSizeRange = function (sizeRange) {
@@ -88,8 +99,8 @@ var DrawHelper = function (channel) {
         if (res === 'down') {
             prevX = currX;
             prevY = currY;
-            currX = (e.clientX - rect.left) / (rect.right - rect.left) * canvas.width;
-            currY = (e.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height;
+            currX = Math.ceil((e.clientX - rect.left) / (rect.right - rect.left) * canvas.width);
+            currY = Math.ceil((e.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height);
 
             flag = true;
             dot_flag = true;
@@ -109,8 +120,8 @@ var DrawHelper = function (channel) {
             if (flag) {
                 prevX = currX;
                 prevY = currY;
-                currX = (e.clientX - rect.left) / (rect.right - rect.left) * canvas.width;
-                currY = (e.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height;
+                currX = Math.ceil((e.clientX - rect.left) / (rect.right - rect.left) * canvas.width);
+                currY = Math.ceil((e.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height);
                 this.draw();
             }
         }
@@ -175,7 +186,7 @@ var DrawHelper = function (channel) {
         ctx.lineJoin = ctx.lineCap = 'round';
         ctx.stroke();
         ctx.closePath();
-        //this.channel.sendInstructions(prevX, prevY, currX, currY, this.color, this.pencilSize);
+        this.channel.sendInstructions(prevX, prevY, currX, currY, this.color, this.pencilSize);
         //overloads socket, sending canvas copies every 1 second is lot better.
     }.bind(this);
 
@@ -187,8 +198,8 @@ var DrawHelper = function (channel) {
     this.findPos = function (canvas, e) {
         var rect = canvas.getBoundingClientRect();
         return {
-            x: (e.clientX - rect.left) / (rect.right - rect.left) * canvas.width,
-            y: (e.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
+            x: Math.ceil((e.clientX - rect.left) / (rect.right - rect.left) * canvas.width),
+            y: Math.ceil((e.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height)
         };
     }.bind(this);
 
@@ -265,13 +276,13 @@ var DrawHelper = function (channel) {
             var startY;
 
             fakeCanvas.addEventListener("mousedown", mousedown = function (e) {
-                startX = (e.clientX - rect.left) / (rect.right - rect.left) * fakeCanvas.width;
-                startY = (e.clientY - rect.top) / (rect.bottom - rect.top) * fakeCanvas.height;
+                startX = Math.ceil((e.clientX - rect.left) / (rect.right - rect.left) * fakeCanvas.width);
+                startY = Math.ceil((e.clientY - rect.top) / (rect.bottom - rect.top) * fakeCanvas.height);
             }, false);
 
             fakeCanvas.addEventListener("mousemove", mousemove = function (e) {
-                currX = (e.clientX - rect.left) / (rect.right - rect.left) * fakeCanvas.width;
-                currY = (e.clientY - rect.top) / (rect.bottom - rect.top) * fakeCanvas.height;
+                currX = Math.ceil((e.clientX - rect.left) / (rect.right - rect.left) * fakeCanvas.width);
+                currY = Math.ceil((e.clientY - rect.top) / (rect.bottom - rect.top) * fakeCanvas.height);
 
                 ctx.clearRect(0, 0, fakeCanvas.width, fakeCanvas.height);
                 if (shape === "rectangle") {
@@ -348,17 +359,17 @@ var DrawHelper = function (channel) {
                 pickerCanvas.className = "";
                 canvas.removeEventListener("mousemove", mousePicker);
 
-                this.defaultDrawingON(canvas);
+                this.defaultDrawingOn(canvas);
                 canvas.removeEventListener("click", pickedColor);
             }.bind(this), false);
 
-            this.defaultDrawingOFF(canvas);
+            this.defaultDrawingOff(canvas);
         } else {
             canvas.style.cursor = "auto";
             pickerCanvas.className = "";
             canvas.removeEventListener("mousemove", mousePicker);
 
-            this.defaultDrawingON(canvas);
+            this.defaultDrawingOn(canvas);
         }
     }.bind(this);
 

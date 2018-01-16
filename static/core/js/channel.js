@@ -13,8 +13,8 @@ var Channel = function () {
         this.socket.target = target;
 
         window.setInterval(function () {
-            tick = true;
-        }, 1000);
+            this.tick = true;
+        }.bind(this), 200);
 
         this.socket.onmessage = function (e) {
             var message_json = JSON.parse(e.data);
@@ -114,8 +114,8 @@ var Channel = function () {
                 text: text,
                 room: username
             };
-            if (tic)
-                this.socket.send(JSON.stringify(msg));
+            // if (tic)
+            this.socket.send(JSON.stringify(msg));
         }
     }.bind(this);
 
