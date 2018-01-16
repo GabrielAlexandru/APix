@@ -42,10 +42,14 @@
 }
 
 .capture {
+    width: 100%;
+    height: 100%;
+}
+
+.capture-parent {
     width: 40%;
     height: 40%;
     padding-top: 5px;
-    cursor: pointer;
 }
 
 #circle {
@@ -381,5 +385,23 @@ input[type=range]:focus::-ms-fill-upper {
 }
 
 .shape-on {
+    opacity: 0.5;
+}
+
+.close-capture {
+    color: #777;
+    font: 14px/100% arial, sans-serif;
+    text-decoration: none;
+    text-shadow: 0 1px 0 #fff;
+    position: absolute;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.close-capture:after{
+    content: '✖';
+}
+
+.close-capture:hover {
     opacity: 0.5;
 }
