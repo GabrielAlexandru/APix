@@ -247,7 +247,6 @@ var DrawHelper = function (channel) {
             obj.classList.add("shape-on");
 
             var container = document.getElementById("content");
-<<<<<<< HEAD
             if (document.getElementById("fake-canvas") === null) {
                 fakeCanvas = canvas.cloneNode(true);
                 fakeCanvas.id = "fake-canvas";
@@ -261,18 +260,6 @@ var DrawHelper = function (channel) {
             }
             var ctx = fakeCanvas.getContext("2d");
             ctx.clearRect(0, 0, fakeCanvas.width, fakeCanvas.height);
-=======
-            var fakeCanvas = canvas.cloneNode(true);
-            fakeCanvas.style.cursor = "crosshair";
-            fakeCanvas.style.opacity = "0.5";
-            fakeCanvas.style.position = "absolute";
-            fakeCanvas.style.width = canvas.style.width;
-            fakeCanvas.style.height = canvas.style.height;
-            // canvas.style.display = "none";
-            var ctx = fakeCanvas.getContext("2d");
-            ctx.clearRect(0, 0, fakeCanvas.width, fakeCanvas.height);
-            container.insertBefore(fakeCanvas, container.childNodes[0]);
->>>>>>> 95656a5a6cb8a97da48a4b5bc42af2dac93df235
             var rect = fakeCanvas.getBoundingClientRect();
 
 
@@ -285,7 +272,6 @@ var DrawHelper = function (channel) {
             }, false);
 
             fakeCanvas.addEventListener("mousemove", mousemove = function (e) {
-                console.log(currX, currY);
                 currX = (e.clientX - rect.left) / (rect.right - rect.left) * fakeCanvas.width;
                 currY = (e.clientY - rect.top) / (rect.bottom - rect.top) * fakeCanvas.height;
 
@@ -325,7 +311,6 @@ var DrawHelper = function (channel) {
                 obj.classList.remove("shape-on");
             }.bind(this), false);
         } else {
-            canvas.style.cursor = "auto";
             obj.classList.remove("shape-on");
         }
     }.bind(this);
