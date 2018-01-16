@@ -463,7 +463,7 @@ var DrawHelper = function (channel) {
         var helper = this;
         var imgInput = document.createElement("input");
         var image = new Image();
-        image.onload = function(){
+        image.onload = function () {
             helper.ctx.drawImage(this, 0, 0, helper.canvas.width, helper.canvas.height);
         };
         imgInput.type = "file";
@@ -476,7 +476,6 @@ var DrawHelper = function (channel) {
             freader.readAsDataURL(imgInput.files[0]);
             freader.onloadend = function (e) {
                 image.src = e.target.result;
-
             };
         }, false);
         document.body.removeChild(imgInput);
