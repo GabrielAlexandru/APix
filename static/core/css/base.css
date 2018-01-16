@@ -87,3 +87,8 @@ body {
     background: #1ab188;
     width: 100%;
 }
+
+a.disabled {
+   pointer-events: none;
+   cursor: default;
+}

@@ -39,14 +39,5 @@ def draw(request):
         username = request.user.username
         return render(request, 'core/draw.html', {'username': username})
 
-
-def mobile_draw(request):
-    if not request.user.is_authenticated:
-        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-    else:
-        username = request.user.username
-        return render(request, 'core/m.draw.html', {'username': username})
-
-
 def documentation(request):
     return render(request, 'core/documentation.html')
