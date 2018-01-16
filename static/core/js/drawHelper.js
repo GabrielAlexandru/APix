@@ -454,14 +454,22 @@ var DrawHelper = function (channel) {
 
     this.capture = function () {
         var helper = this;
-        var img = helper.canvas.toDataURL("image/png");
-        var imgDiv = document.createElement("img");
+        var imgURI = helper.canvas.toDataURL("image/png");
+        var img = document.createElement("img");
         var close = document.createElement("div");
+        var imgDiv = document.createElement("div");
         close.classList.add("close-capture");
         imgDiv.append(close);
-        imgDiv.classList.add("capture");
-        imgDiv.src = img;
+        imgDiv.classList.add("capture-parent");
+        img.classList.add("capture");
+        img.src = imgURI;
+        imgDiv.append(img);
         helper.captures.append(imgDiv);
+
+        close.addEventListener("click", function (e) {
+           var toDelete = this.parentNode;
+           toDelete.parentNode.removeChild(toDelete);
+        });
 
     }.bind(this);
 
