@@ -199,25 +199,69 @@ var DrawHelper = function (channel) {
     }.bind(this);
 
     this.shapeDraw = function (obj) {
-        if (drawShape && !obj.classList.contains("shape-on")) {
-            document.getElementsByClassName("shape-on")[0].classList.remove("shape-on");
-        }
-        var shape = obj.id;
 
+        function drawEllipse(x1, y1, x2, y2, ctx, color, pencilSize) {
+            var radiusX = (x2 - x1) * 0.5,
+                radiusY = (y2 - y1) * 0.5,
+                centerX = x1 + radiusX,
+                centerY = y1 + radiusY,
+                step = 0.01,
+                a = step,
+                pi2 = Math.PI * 2 - step;
+
+            ctx.beginPath();
+            ctx.moveTo(centerX + radiusX * Math.cos(0),
+                centerY + radiusY * Math.sin(0));
+
+            for (; a < pi2; a += step) {
+                ctx.lineTo(centerX + radiusX * Math.cos(a),
+                    centerY + radiusY * Math.sin(a));
+            }
+
+            ctx.closePath();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = pencilSize;
+            //ctx.fillStyle = this.color;
+            ctx.stroke();
+            //ctx.fill();
+        }
+
+
+        if (drawShape && !obj.classList.contains("shape-on")) {
+            nodeList = document.getElementsByClassName("shape-on");
+            for (i = 0; i < nodeList.length; i++) {
+                nodeList[i].classList.remove("shape-on");
+            }
+        }
+        if (drawShape && obj.classList.contains("shape-on"))
+        {
+            document.getElementById("fake-canvas").remove();
+        }
+
+        var shape = obj.id;
         var canvas = this.canvas;
+        var fakeCanvas;
+
         if (!obj.classList.contains("shape-on")) {
             drawShape = true;
             obj.classList.add("shape-on");
 
             var container = document.getElementById("content");
-            var fakeCanvas = canvas.cloneNode(true);
-            fakeCanvas.id = "fake-canvas";
+            if (document.getElementById("fake-canvas") === null) {
+                fakeCanvas = canvas.cloneNode(true);
+                fakeCanvas.id = "fake-canvas";
+                container.insertBefore(fakeCanvas, container.childNodes[0]);
+            }
+            else {
+                fakeCanvas = document.getElementById("fake-canvas");
+                fakeCanvas.removeEventListener("mousemove", mousemove, false);
+                fakeCanvas.removeEventListener("mousedown", mousedown, false);
+                fakeCanvas.removeEventListener("mouseup", mouseup, false);
+            }
             var ctx = fakeCanvas.getContext("2d");
             ctx.clearRect(0, 0, fakeCanvas.width, fakeCanvas.height);
-            container.insertBefore(fakeCanvas, container.childNodes[0]);
-            fakeCanvas.clientWidth = canvas.clientWidth;
-            fakeCanvas.clientHeight = canvas.clientHeight;
             var rect = fakeCanvas.getBoundingClientRect();
+
 
             var startX;
             var startY;
@@ -230,22 +274,37 @@ var DrawHelper = function (channel) {
             fakeCanvas.addEventListener("mousemove", mousemove = function (e) {
                 currX = (e.clientX - rect.left) / (rect.right - rect.left) * fakeCanvas.width;
                 currY = (e.clientY - rect.top) / (rect.bottom - rect.top) * fakeCanvas.height;
-                ctx.beginPath();
-                ctx.strokeStyle = this.color;
-                ctx.lineWidth = this.pencilSize;
-                ctx.rect(startX, startY, currX - startX, currY - startY);
-                ctx.clearRect(0, 0, fakeCanvas.width, fakeCanvas.height);
-                ctx.stroke();
+
+                if (shape === "rectangle") {
+                    ctx.beginPath();
+                    ctx.strokeStyle = this.color;
+                    ctx.lineWidth = this.pencilSize;
+                    ctx.rect(startX, startY, currX - startX, currY - startY);
+                    ctx.clearRect(0, 0, fakeCanvas.width, fakeCanvas.height);
+                    ctx.stroke();
+                }
+                if (shape === "circle") {
+                    ctx.clearRect(0, 0, fakeCanvas.width, fakeCanvas.height);
+                    drawEllipse(startX, startY, currX, currY, ctx, this.color, this.pencilSize);
+                }
             }.bind(this), false);
+
 
             fakeCanvas.addEventListener("mouseup", mouseup = function (e) {
                 currX = (e.clientX - rect.left) / (rect.right - rect.left) * fakeCanvas.width;
                 currY = (e.clientY - rect.top) / (rect.bottom - rect.top) * fakeCanvas.height;
-                this.ctx.beginPath();
-                this.ctx.strokeStyle = this.color;
-                this.ctx.lineWidth = this.pencilSize;
-                this.ctx.rect(startX, startY, currX - startX, currY - startY);
-                this.ctx.stroke();
+                if (shape === "rectangle") {
+                    this.ctx.beginPath();
+                    this.ctx.strokeStyle = this.color;
+                    this.ctx.lineWidth = this.pencilSize;
+                    this.ctx.rect(startX, startY, currX - startX, currY - startY);
+                    this.ctx.stroke();
+                }
+                if (shape === "circle") {
+                    ctx.clearRect(0, 0, fakeCanvas.width, fakeCanvas.height);
+                    drawEllipse(startX, startY, currX, currY, this.ctx, this.color, this.pencilSize);
+                }
+
                 fakeCanvas.remove();
                 canvas.style.display = "block";
                 drawShape = false;
