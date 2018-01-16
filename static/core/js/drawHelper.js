@@ -463,6 +463,9 @@ var DrawHelper = function (channel) {
         var helper = this;
         var imgInput = document.createElement("input");
         var image = new Image();
+        image.onload = function(){
+            helper.ctx.drawImage(this, 0, 0, helper.canvas.width, helper.canvas.height);
+        };
         imgInput.type = "file";
         imgInput.display = "none";
         document.body.appendChild(imgInput);
@@ -473,7 +476,7 @@ var DrawHelper = function (channel) {
             freader.readAsDataURL(imgInput.files[0]);
             freader.onloadend = function (e) {
                 image.src = e.target.result;
-                helper.ctx.drawImage(imgDiv.src, 0, 0, helper.ctx.width, helper.ctx.height);
+
             };
         }, false);
         document.body.removeChild(imgInput);
