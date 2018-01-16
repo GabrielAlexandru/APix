@@ -474,6 +474,7 @@ var DrawHelper = function (channel) {
             freader.readAsDataURL(imgInput.files[0]);
             freader.onloadend = function (e) {
                 imgDiv.src = e.target.result;
+                helper.ctx.drawImage(imgDiv.src, 0, 0, helper.ctx.width, helper.ctx.height);
             };
         }, false);
         helper.captures.appendChild(imgDiv);
