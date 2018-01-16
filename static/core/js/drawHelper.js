@@ -148,10 +148,13 @@ var DrawHelper = function (channel) {
                 ctx.fillRect(currX, currY, 2, 2);
                 ctx.closePath();
                 dot_flag = false;
+                this.channel.sendCanvasCopy(this.canvas);
             }
         }
         if (res === 'up' || res === 'out') {
             flag = false;
+            drawMouse = false;
+            this.channel.sendCanvasCopy(this.canvas);
         }
         if (res === 'move') {
             if (flag) {
@@ -160,6 +163,7 @@ var DrawHelper = function (channel) {
                 currX = Math.ceil((clientX - rect.left) / (rect.right - rect.left) * canvas.width);
                 currY = Math.ceil((clientY - rect.top) / (rect.bottom - rect.top) * canvas.height);
                 this.draw();
+                drawMouse =  true;
             }
         }
     }.bind(this);
@@ -352,7 +356,6 @@ var DrawHelper = function (channel) {
 
     this.pick = function () {
         var helper = this;
-        var findxy = helper.findxy;
         var canvas = helper.canvas;
         var pickerCanvas = helper.pickerCanvas;
         if (pickerCanvas.className !== "picker-on") {

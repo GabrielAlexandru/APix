@@ -73,7 +73,7 @@ window.onload = function () {
 
 
     getLoggedUsers(loggedUsersContainer);
-    window.setInterval(function () {
-        channel.sendCanvasCopy(drawHelper.canvas);
-    }, 1000);
+    // window.setInterval(function () {
+    //     channel.sendCanvasCopy(drawHelper.canvas);
+    // }, 1000);
 };

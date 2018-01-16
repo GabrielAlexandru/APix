@@ -93,7 +93,7 @@ var Channel = function () {
     }.bind(this);
 
     this.sendCanvasCopy = function (canvas) {
-        if (this.socket.readyState === 1) {
+        if (this.socket.readyState === 1 &&  drawMouse === false) {
             var dataURL = canvas.toDataURL();
             var msg = {
                 type: "canvas",
