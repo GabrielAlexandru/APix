@@ -104,13 +104,3 @@ a.disabled {
 .draw-off {
     background-color: rgb(26, 177, 136);
 }
-
-@media screen and (max-width: 767px) {
-    #username {
-        display: none;
-    }
-
-    #draw-btn {
-        display: block;
-    }
-}

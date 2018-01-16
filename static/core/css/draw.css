@@ -208,7 +208,7 @@
         position: relative !important;
     }
 
-    #shapes, #shapes + .spacer, #image-processing, #image-processing2, #captures {
+    #image-processing2, #captures , .tooltiptext{
         display: none;
     }
 
