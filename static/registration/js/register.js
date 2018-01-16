@@ -26,4 +26,5 @@ window.onload = function () {
 
     document.getElementById("id_username").blur();
     document.getElementById("id_username").focus();
+    document.getElementById("a-register").classList.add("disabled");
 };

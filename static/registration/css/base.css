@@ -126,3 +126,8 @@ body {
     font-size: 20px;
     background: #417690;
 }
+
+a.disabled {
+   pointer-events: none;
+   cursor: default;
+}

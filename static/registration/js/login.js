@@ -12,4 +12,5 @@ window.onload = function () {
     }
 
     document.getElementsByTagName("input")[0].blur()
+    document.getElementById("a-login").classList.add("disabled");
 };
