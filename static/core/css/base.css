@@ -92,3 +92,25 @@ a.disabled {
    pointer-events: none;
    cursor: default;
 }
+
+#draw-btn {
+    display: none;
+}
+
+.draw-on {
+    background-color: rgba(160, 179, 176, 0.25);
+}
+
+.draw-off {
+    background-color: rgb(26, 177, 136);
+}
+
+@media screen and (max-width: 767px) {
+    #username {
+        display: none;
+    }
+
+    #draw-btn {
+        display: block;
+    }
+}

@@ -456,6 +456,9 @@ var DrawHelper = function (channel) {
         var helper = this;
         var img = helper.canvas.toDataURL("image/png");
         var imgDiv = document.createElement("img");
+        var close = document.createElement("div");
+        close.classList.add("close-capture");
+        imgDiv.append(close);
         imgDiv.classList.add("capture");
         imgDiv.src = img;
         helper.captures.append(imgDiv);

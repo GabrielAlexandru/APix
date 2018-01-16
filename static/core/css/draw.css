@@ -64,15 +64,19 @@
     cursor: pointer;
 }
 
-#image-processing, #image-processing2 {
+#image-processing, #image-processing2, image-processing3 {
     margin-bottom: 10px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-evenly;
 }
+/*delete pls!!*/
+#image-processing3 {
+    display: none;
+}
 
-#download-parent, #download-png-parent, #download-svg-parent, #clear-canvas-parent, #upload-image-parent {
+#download-parent, #download-png-parent, #download-svg-parent, #clear-canvas-parent, #upload-image-parent, #draw-click-parent {
     width: 60px;
     height: 60px;
     margin: auto;
@@ -85,7 +89,7 @@
     background-position: center;
 }
 
-#download, #download-png, #download-svg, #clear-canvas, #upload-image {
+#download, #download-png, #download-svg, #clear-canvas, #upload-image, #draw-click {
     width: 60px;
     height: 60px;
     margin: auto;
