@@ -19,7 +19,7 @@ var Channel = function () {
         this.socket.onmessage = function (e) {
             var message_json = JSON.parse(e.data);
             var text = message_json['text'];
-            if (device === "desktop") {
+            if (this.socket.device === "desktop") {
                 if (username !== message_json['username']) {
                     if (message_json['type'] === "command") {
                         drawHelper.ctx.beginPath();
@@ -131,6 +131,7 @@ var Channel = function () {
             // if (tic)
             this.socket.send(JSON.stringify(msg));
 
+            this.tick = false;
         }
     }.bind(this);
 

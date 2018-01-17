@@ -45,6 +45,7 @@ window.onload = function () {
     username = document.getElementById("username").innerText;
     var loggedUsersContainer = document.getElementById("logged-users");
 
+    workspace = "desktop";
     channel = new Channel();
     channel.initSocket(username, workspace);
 
@@ -53,22 +54,30 @@ window.onload = function () {
         remoteButton.classList.remove("disabled");
         remoteButton.onclick = function () {
             if (remoteButton.innerText === username) {
-                document.getElementById("image-processing3").style.display = "block";
+                //document.getElementById("image-processing3").style.display = "block";
+                document.getElementById("shapes").style.display = "none";
+                document.getElementById("shapes").nextElementSibling.style.display = "none";
+                document.getElementById("collab-drawing").style.display = "none";
+                document.getElementById("color-picker-parent").style.display = "none";
                 remoteButton.innerText = "Remote";
                 workspace = "remote";
+                channel.socket.device = workspace;
                 window.addEventListener("deviceorientation", deviceorientation = function (e) {
-                    channel.sendRemotePosition(e)
+                    channel.sendRemotePosition(e);
                 }, false);
             }
             else {
-                document.getElementById("image-processing3").style.display = "none";
+                //document.getElementById("image-processing3").style.display = "none";
+                document.getElementById("shapes").style.display = "flex";
+                document.getElementById("shapes").nextElementSibling.style.display = "block";
+                document.getElementById("collab-drawing").style.display = "block";
+                document.getElementById("color-picker-parent").style.display = "block";
                 remoteButton.innerText = username;
                 workspace = "desktop";
+                channel.socket.device = workspace;
                 window.removeEventListener("deviceorientation", deviceorientation, false);
             }
         };
-    } else {
-        workspace = "desktop";
     }
 
     drawHelper = new DrawHelper(channel);
