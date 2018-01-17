@@ -25,6 +25,7 @@ var DrawHelper = function (channel) {
     this.color = "black";
     this.pencilSize = 5;
     this.captures = null;
+    this.mode = "desktop";
     this.captureList = [];
 
     this.recalibrate = function () {
@@ -46,39 +47,53 @@ var DrawHelper = function (channel) {
         this.recalibrate();
     }.bind(this);
 
-    this.onlongtouch = function () {
-        findxy('move', e)
-    };
-
     this.defaultDrawingOn = function (canvas) {
         var findxy = this.findxy;
-        canvas.addEventListener("mousemove", mousemove = function (e) {
-            findxy('move', e)
-        }, false);
-        canvas.addEventListener("mousedown", mousedown = function (e) {
-            findxy('down', e)
-        }, false);
-        canvas.addEventListener("mouseup", mouseup = function (e) {
-            findxy('up', e)
-        }, false);
-        canvas.addEventListener("mouseout", mouseout = function (e) {
-            findxy('out', e)
-        }, false);
+
         if (isAndroid) {
             canvas.addEventListener("touchmove", mousemove = function (e) {
-                findxy('move', e)
-            }, false);
+                if (this.mode === "remote") {
+                    drawMouse = true;
+                    return;
+                }
+                findxy('move', e);
+            }.bind(this), false);
             canvas.addEventListener("touchstart", mousedown = function (e) {
-                findxy('down', e)
-            }, false);
+                if (this.mode === "remote") {
+                    drawMouse = true;
+                    return;
+                }
+                findxy('down', e);
+            }.bind(this), false);
             canvas.addEventListener("touchend", mouseup = function (e) {
-                findxy('up', e)
-            }, false);
+                if (this.mode === "remote") {
+                    drawMouse = false;
+                    return;
+                }
+                findxy('up', e);
+            }.bind(this), false);
             canvas.addEventListener("touchcancel", mouseout = function (e) {
-                findxy('out', e)
+                if (this.mode === "remote") {
+                    drawMouse = false;
+                    return;
+                }
+                findxy('out', e);
+            }.bind(this), false);
+        }
+        else {
+            canvas.addEventListener("mousemove", mousemove = function (e) {
+                findxy('move', e);
+            }, false);
+            canvas.addEventListener("mousedown", mousedown = function (e) {
+                findxy('down', e);
+            }, false);
+            canvas.addEventListener("mouseup", mouseup = function (e) {
+                findxy('up', e);
+            }, false);
+            canvas.addEventListener("mouseout", mouseout = function (e) {
+                findxy('out', e);
             }, false);
         }
-
     }.bind(this);
 
     this.defaultDrawingOff = function (canvas) {
@@ -163,7 +178,7 @@ var DrawHelper = function (channel) {
                 currX = Math.ceil((clientX - rect.left) / (rect.right - rect.left) * canvas.width);
                 currY = Math.ceil((clientY - rect.top) / (rect.bottom - rect.top) * canvas.height);
                 this.draw();
-                drawMouse =  true;
+                drawMouse = true;
             }
         }
     }.bind(this);
@@ -467,8 +482,8 @@ var DrawHelper = function (channel) {
         helper.captures.append(imgDiv);
 
         close.addEventListener("click", function (e) {
-           var toDelete = this.parentNode;
-           toDelete.parentNode.removeChild(toDelete);
+            var toDelete = this.parentNode;
+            toDelete.parentNode.removeChild(toDelete);
         });
 
     }.bind(this);

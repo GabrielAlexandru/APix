@@ -4,6 +4,8 @@ var Channel = function () {
     this.ball = null;
     this.maxY = null;
     this.maxX = null;
+    this.prevX = null;
+    this.prevY = null;
 
     this.initSocket = function (target, device) {
 
@@ -20,7 +22,7 @@ var Channel = function () {
             var message_json = JSON.parse(e.data);
             var text = message_json['text'];
             if (this.socket.device === "desktop") {
-                if (username !== message_json['username']) {
+                //if (username !== message_json['username']) {
                     if (message_json['type'] === "command") {
                         drawHelper.ctx.beginPath();
                         drawHelper.ctx.moveTo(text[0], text[1]);
@@ -41,10 +43,12 @@ var Channel = function () {
                     if (message_json['type'] === "canvas-clear") {
                         drawHelper.ctx.clearRect(0, 0, drawHelper.canvas.width, drawHelper.canvas.height);
                     }
-                }
+                //}
                 if (message_json['type'] === "remote") {
-                    console.log("remote");
                     this.ball = document.getElementById('ball');
+                    this.ball.style.background = text[2];
+                    this.ball.style.width = text[3] + 10 + "px";
+                    this.ball.style.height = text[3] + 10 + "px";
                     this.maxX = drawHelper.canvas.clientWidth;
                     this.maxY = drawHelper.canvas.clientHeight;
                     var x = text[0];
@@ -73,6 +77,35 @@ var Channel = function () {
 
                     this.ball.style.top = styleTop + "px";
                     this.ball.style.left = styleLeft + "px";
+
+                    if (text[4] === 1) {
+                        var myRect = this.ball.getBoundingClientRect();
+                        var curX = Math.ceil((myRect.x - drawHelper.rect.left) / (drawHelper.rect.right - drawHelper.rect.left) * drawHelper.canvas.width);
+                        var curY = Math.ceil((myRect.y - drawHelper.rect.top) / (drawHelper.rect.bottom - drawHelper.rect.top) * drawHelper.canvas.height);
+
+                        if (this.prevX === null && this.prevY === null) {
+                            this.prevX = curX;
+                            this.prevY = curY;
+                            drawHelper.ctx.beginPath();
+                            drawHelper.ctx.fillStyle = text[2];
+                            drawHelper.ctx.lineJoin = drawHelper.ctx.lineCap = 'round';
+                            drawHelper.ctx.fillRect(curX, curY, text[3], text[3]);
+                            drawHelper.ctx.closePath();
+                        } else {
+                            drawHelper.ctx.beginPath();
+                            drawHelper.ctx.strokeStyle = text[2];
+                            drawHelper.ctx.lineWidth = text[3];
+                            drawHelper.ctx.moveTo(this.prevX, this.prevY);
+                            drawHelper.ctx.lineTo(curX, curY);
+                            this.prevX = curX;
+                            this.prevY = curY;
+                            drawHelper.ctx.stroke();
+                        }
+                    }
+                    else {
+                        this.prevX = null;
+                        this.prevY = null;
+                    }
                 }
             }
         }.bind(this);
@@ -93,7 +126,7 @@ var Channel = function () {
     }.bind(this);
 
     this.sendCanvasCopy = function (canvas) {
-        if (this.socket.readyState === 1 &&  drawMouse === false) {
+        if (this.socket.readyState === 1 && drawMouse === false) {
             var dataURL = canvas.toDataURL();
             var msg = {
                 type: "canvas",
@@ -121,7 +154,12 @@ var Channel = function () {
         if (this.socket.readyState === 1 && this.tick === true) {
             var x = event.beta;
             var y = event.gamma;
-            var text = [x, y];
+            var color = drawHelper.color;
+            var pencilSize = drawHelper.pencilSize;
+            var drawing;
+            if (drawMouse) drawing = 1;
+            else drawing = 0;
+            var text = [x, y, color, pencilSize, drawing];
 
             var msg = {
                 type: "remote",
