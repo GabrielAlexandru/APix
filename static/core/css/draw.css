@@ -16,8 +16,8 @@
 }
 
 #fake-canvas {
-    width: calc(100% - 32px);
-    height: calc(100% - 32px);
+    width: calc(100% - 16px);
+    height: calc(100% - 16px);
     position: absolute;
     cursor: crosshair;
 }
@@ -200,6 +200,11 @@
     }
 
     #collab-drawing {
+        display: block;
+        margin: 8px;
+    }
+
+    #fake-canvas {
         display: block;
         margin: 8px;
     }

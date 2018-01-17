@@ -43,6 +43,10 @@ var Channel = function () {
                     if (message_json['type'] === "canvas-clear") {
                         drawHelper.ctx.clearRect(0, 0, drawHelper.canvas.width, drawHelper.canvas.height);
                     }
+
+                    if (message_json['type'] === "canvas-copy") {
+                        this.sendCanvasCopy(drawHelper.canvas, "canvas-copy");
+                    }
                 //}
                 if (message_json['type'] === "remote") {
                     this.ball = document.getElementById('ball');
@@ -125,8 +129,8 @@ var Channel = function () {
         }.bind(this);
     }.bind(this);
 
-    this.sendCanvasCopy = function (canvas) {
-        if (this.socket.readyState === 1 && drawMouse === false) {
+    this.sendCanvasCopy = function (canvas, token) {
+        if ((this.socket.readyState === 1 && drawMouse === false) || (token !==null)) {
             var dataURL = canvas.toDataURL();
             var msg = {
                 type: "canvas",

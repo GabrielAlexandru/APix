@@ -50,7 +50,6 @@ window.onload = function () {
     channel.initSocket(username, workspace);
 
     if (isAndroid) {
-        document.getElementById("ball").style.display = "none";
         remoteButton = document.getElementById("username");
         remoteButton.classList.remove("disabled");
         remoteButton.onclick = function () {
@@ -61,10 +60,12 @@ window.onload = function () {
                 document.getElementById("collab-drawing").style.background = "#1ab188";
                 drawHelper.ctx.clearRect(0, 0, drawHelper.canvas.width, drawHelper.canvas.height);
                 document.getElementById("color-picker-parent").style.display = "none";
+                document.getElementById("upload-image").style.display = "none";
                 remoteButton.innerText = "Remote";
                 workspace = "remote";
                 channel.socket.device = workspace;
                 drawHelper.mode = workspace;
+                document.getElementById("ball").style.display = "none";
                 window.addEventListener("deviceorientation", deviceorientation = function (e) {
                     channel.sendRemotePosition(e);
                 }, false);
@@ -76,10 +77,12 @@ window.onload = function () {
                 document.getElementById("shapes").nextElementSibling.style.display = "block";
                 //document.getElementById("collab-drawing").style.display = "block";
                 document.getElementById("color-picker-parent").style.display = "block";
+                document.getElementById("upload-image").style.display = "block";
                 remoteButton.innerText = username;
                 workspace = "desktop";
                 channel.socket.device = workspace;
                 drawHelper.mode = workspace;
+                document.getElementById("ball").style.display = "block";
                 window.removeEventListener("deviceorientation", deviceorientation, false);
             }
         };

@@ -52,6 +52,7 @@ var DrawHelper = function (channel) {
 
         if (isAndroid) {
             canvas.addEventListener("touchmove", mousemove = function (e) {
+                e.preventDefault();
                 if (this.mode === "remote") {
                     drawMouse = true;
                     return;
@@ -63,6 +64,7 @@ var DrawHelper = function (channel) {
                     drawMouse = true;
                     return;
                 }
+                this.recalibrate();
                 findxy('down', e);
             }.bind(this), false);
             canvas.addEventListener("touchend", mouseup = function (e) {
@@ -140,8 +142,10 @@ var DrawHelper = function (channel) {
         var rect = this.rect;
         var ctx = this.ctx;
         if (isAndroid) {
-            clientX = e.touches[0].pageX;
-            clientY = e.touches[0].pageY;
+            if (!(res === 'up' || res === 'out')) {
+                clientX = e.touches[0].pageX;
+                clientY = e.touches[0].pageY;
+            }
         } else {
             clientX = e.clientX;
             clientY = e.clientY;
@@ -331,14 +335,32 @@ var DrawHelper = function (channel) {
             var startX;
             var startY;
 
-            fakeCanvas.addEventListener("mousedown", mousedown = function (e) {
-                startX = Math.ceil((e.clientX - rect.left) / (rect.right - rect.left) * fakeCanvas.width);
-                startY = Math.ceil((e.clientY - rect.top) / (rect.bottom - rect.top) * fakeCanvas.height);
-            }.bind(this), false);
+            var fakeCanvasMouseDown = function (e) {
+                var clientX;
+                var clientY;
+                if (isAndroid) {
+                    clientX = e.touches[0].pageX;
+                    clientY = e.touches[0].pageY;
+                } else {
+                    clientX = e.clientX;
+                    clientY = e.clientY;
+                }
+                startX = Math.ceil((clientX - rect.left) / (rect.right - rect.left) * fakeCanvas.width);
+                startY = Math.ceil((clientY - rect.top) / (rect.bottom - rect.top) * fakeCanvas.height);
+            }.bind(this);
 
-            fakeCanvas.addEventListener("mousemove", mousemove = function (e) {
-                currX = Math.ceil((e.clientX - rect.left) / (rect.right - rect.left) * fakeCanvas.width);
-                currY = Math.ceil((e.clientY - rect.top) / (rect.bottom - rect.top) * fakeCanvas.height);
+            var fakeCanvasMouseMove = function (e) {
+                var clientX;
+                var clientY;
+                if (isAndroid) {
+                    clientX = e.touches[0].pageX;
+                    clientY = e.touches[0].pageY;
+                } else {
+                    clientX = e.clientX;
+                    clientY = e.clientY;
+                }
+                currX = Math.ceil((clientX - rect.left) / (rect.right - rect.left) * fakeCanvas.width);
+                currY = Math.ceil((clientY - rect.top) / (rect.bottom - rect.top) * fakeCanvas.height);
 
                 ctx.clearRect(0, 0, fakeCanvas.width, fakeCanvas.height);
                 if (shape === "rectangle") {
@@ -347,12 +369,13 @@ var DrawHelper = function (channel) {
                 if (shape === "circle") {
                     drawEllipse(startX, startY, currX, currY, ctx, this.color, this.pencilSize);
                 }
-            }.bind(this), false);
+            }.bind(this);
 
-
-            fakeCanvas.addEventListener("mouseup", mouseup = function (e) {
-                currX = (e.clientX - rect.left) / (rect.right - rect.left) * fakeCanvas.width;
-                currY = (e.clientY - rect.top) / (rect.bottom - rect.top) * fakeCanvas.height;
+            var fakeCanvasMouseUp = function (e) {
+                if (!isAndroid) {
+                    currX = (e.clientX - rect.left) / (rect.right - rect.left) * fakeCanvas.width;
+                    currY = (e.clientY - rect.top) / (rect.bottom - rect.top) * fakeCanvas.height;
+                }
                 if (shape === "rectangle") {
                     drawRectangle(startX, startY, currX, currY, this.ctx, this.color, this.pencilSize);
                 }
@@ -362,8 +385,40 @@ var DrawHelper = function (channel) {
 
                 fakeCanvas.remove();
                 drawShape = false;
+                this.channel.sendCanvasCopy(this.canvas);
                 obj.classList.remove("shape-on");
-            }.bind(this), false);
+            }.bind(this);
+
+
+            if (isAndroid) {
+                fakeCanvas.addEventListener("touchmove", mousemove = function (e) {
+                    e.preventDefault();
+                    fakeCanvasMouseMove(e);
+                }.bind(this), false);
+                fakeCanvas.addEventListener("touchstart", mousedown = function (e) {
+                    fakeCanvasMouseDown(e);
+                }.bind(this), false);
+                fakeCanvas.addEventListener("touchend", mouseup = function (e) {
+                    fakeCanvasMouseUp(e);
+                }.bind(this), false);
+                fakeCanvas.addEventListener("touchcancel", mouseout = function (e) {
+                    fakeCanvasMouseUp(e);
+                }.bind(this), false);
+            }
+            else {
+                fakeCanvas.addEventListener("mousedown", mousedown = function (e) {
+                    fakeCanvasMouseDown(e);
+                }.bind(this), false);
+
+                fakeCanvas.addEventListener("mousemove", mousemove = function (e) {
+                    fakeCanvasMouseMove(e);
+                }.bind(this), false);
+
+                fakeCanvas.addEventListener("mouseup", mouseup = function (e) {
+                    fakeCanvasMouseUp(e);
+                }.bind(this), false);
+            }
+
         } else {
             obj.classList.remove("shape-on");
         }
@@ -494,6 +549,7 @@ var DrawHelper = function (channel) {
         var image = new Image();
         image.onload = function () {
             helper.ctx.drawImage(this, 0, 0, helper.canvas.width, helper.canvas.height);
+            helper.channel.sendCanvasCopy(helper.canvas);
         };
         imgInput.type = "file";
         imgInput.display = "none";
